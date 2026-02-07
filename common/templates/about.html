@@ -1,0 +1,89 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}About - CareerSadhana{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row">
+        <div class="col-lg-8 mx-auto">
+            <!-- About Section -->
+            <div class="mb-5">
+                <h1 class="mb-4">About CareerSadhana</h1>
+                <p class="lead">CareerSadhana is your comprehensive platform for career development and job opportunities in India.</p>
+                
+                <div class="mt-4">
+                    <h3>Our Mission</h3>
+                    <p>We are dedicated to empowering job seekers with the tools and resources they need to succeed in today's competitive job market. Our platform combines cutting-edge AI technology with curated job listings to provide a complete career solution.</p>
+                    
+                    <h3 class="mt-4">What We Offer</h3>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i> <strong>ATS Resume Checker:</strong> Get instant feedback on your resume with our AI-powered analysis tool</li>
+                        <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i> <strong>Government Jobs:</strong> Daily updates on central and state government job postings</li>
+                        <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i> <strong>Private Jobs:</strong> Curated opportunities from top companies across industries</li>
+                        <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i> <strong>Career Guidance:</strong> Tips and resources to improve your job search</li>
+                    </ul>
+                    
+                    <h3 class="mt-4">Why Choose Us</h3>
+                    <div class="row mt-3">
+                        <div class="col-md-6 mb-3">
+                            <div class="card border-primary-custom">
+                                <div class="card-body">
+                                    <h5 class="card-title"><i class="bi bi-shield-check text-primary-custom"></i> Trusted</h5>
+                                    <p class="card-text">Verified job postings from authentic sources</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <div class="card border-primary-custom">
+                                <div class="card-body">
+                                    <h5 class="card-title"><i class="bi bi-clock-history text-primary-custom"></i> Updated Daily</h5>
+                                    <p class="card-text">Fresh job listings added every day</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <div class="card border-primary-custom">
+                                <div class="card-body">
+                                    <h5 class="card-title"><i class="bi bi-robot text-primary-custom"></i> AI-Powered</h5>
+                                    <p class="card-text">Smart resume analysis and recommendations</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <div class="card border-primary-custom">
+                                <div class="card-body">
+                                    <h5 class="card-title"><i class="bi bi-gift text-primary-custom"></i> Free</h5>
+                                    <p class="card-text">All features available at no cost</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Social Media -->
+            <div class="mb-5 text-center p-4 bg-light rounded">
+                <h3 class="mb-3">Connect With Us</h3>
+                <div class="social-links">
+                    <a href="#" class="btn btn-outline-primary me-2 mb-2"><i class="bi bi-facebook"></i> Facebook</a>
+                    <a href="#" class="btn btn-outline-info me-2 mb-2"><i class="bi bi-twitter"></i> Twitter</a>
+                    <a href="#" class="btn btn-outline-primary me-2 mb-2"><i class="bi bi-linkedin"></i> LinkedIn</a>
+                    <a href="#" class="btn btn-outline-danger me-2 mb-2"><i class="bi bi-instagram"></i> Instagram</a>
+                </div>
+            </div>
+
+            <!-- Contact Form -->
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary-custom text-white">
+                    <h3 class="mb-0"><i class="bi bi-envelope"></i> Contact Us</h3>
+                </div>
+                <div class="card-body">
+                    <p>Have questions or feedback? We'd love to hear from you!</p>
+                    {% crispy form %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

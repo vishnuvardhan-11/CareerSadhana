@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+
+{% block title %}Private Jobs - CareerSadhana{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <h1 class="mb-4">Private Sector Jobs</h1>
+    
+    <!-- Search and Filter -->
+    <div class="card mb-4">
+        <div class="card-body">
+            <form method="get" class="row g-3">
+                <div class="col-md-5">
+                    <input type="text" name="q" class="form-control" placeholder="Search by role or company..." value="{{ query }}">
+                </div>
+                <div class="col-md-4">
+                    <input type="text" name="location" class="form-control" placeholder="Location" value="{{ location }}">
+                </div>
+                <div class="col-md-3">
+                    <button type="submit" class="btn btn-primary-custom w-100">Search</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <p class="text-muted">Found {{ total_jobs }} job{{ total_jobs|pluralize }}</p>
+    
+    <!-- Job Listings -->
+    {% for job in page_obj %}
+    <div class="card job-card mb-3">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-8">
+                    <h5 class="card-title">{{ job.role }}</h5>
+                    <p class="mb-1"><strong>{{ job.company_name }}</strong></p>
+                    <p class="mb-1"><i class="bi bi-cash-stack"></i> {{ job.salary }}</p>
+                    <p class="mb-1"><i class="bi bi-geo-alt"></i> {{ job.location }}</p>
+                    <p class="mb-1"><i class="bi bi-mortarboard"></i> {{ job.qualification }}</p>
+                    <p class="mb-1"><i class="bi bi-briefcase"></i> Experience: {{ job.experience }}</p>
+                </div>
+                <div class="col-md-4 text-end">
+                    <a href="{{ job.apply_link }}" target="_blank" class="btn btn-accent-custom">Apply Now</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% empty %}
+    <div class="alert alert-info">No jobs found.</div>
+    {% endfor %}
+    
+    <!-- Pagination -->
+    {% if page_obj.has_other_pages %}
+    <nav>
+        <ul class="pagination justify-content-center">
+            {% if page_obj.has_previous %}
+            <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}&q={{ query }}&location={{ location }}">Previous</a></li>
+            {% endif %}
+            <li class="page-item active"><span class="page-link">{{ page_obj.number }}</span></li>
+            {% if page_obj.has_next %}
+            <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}&q={{ query }}&location={{ location }}">Next</a></li>
+            {% endif %}
+        </ul>
+    </nav>
+    {% endif %}
+</div>
+{% endblock %}

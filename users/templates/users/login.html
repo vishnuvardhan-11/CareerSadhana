@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}Login - CareerSadhana{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow">
+                <div class="card-header bg-primary-custom text-white text-center">
+                    <h3><i class="bi bi-person-circle"></i> Login</h3>
+                </div>
+                <div class="card-body p-4">
+                    <form method="post">
+                        {% csrf_token %}
+                        {% crispy form %}
+                        <button type="submit" class="btn btn-primary-custom w-100">Login</button>
+                    </form>
+                    <hr>
+                    <p class="text-center mb-0">
+                        Don't have an account? <a href="{% url 'users:register' %}">Sign up</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

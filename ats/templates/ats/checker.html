@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}ATS Score Checker - CareerSadhana{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <h1 class="mb-4">ATS Resume Score Checker</h1>
+    <p class="lead">Upload your resume and get instant AI-powered feedback</p>
+    
+    {% if analysis_result %}
+    <!-- Analysis Results -->
+    <div class="card mb-4 shadow">
+        <div class="card-header bg-primary-custom text-white">
+            <h3><i class="bi bi-check-circle"></i> Analysis Complete</h3>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-4 text-center">
+                    <h5>Your ATS Score</h5>
+                    <div class="score-display">
+                        <h1 class="display-1 text-accent-custom">{{ analysis_result.score }}</h1>
+                        <p class="text-muted">out of 100</p>
+                    </div>
+                    <div class="progress" style="height: 25px;">
+                        <div class="progress-bar" role="progressbar" 
+                             style="width: {{ analysis_result.score }}%; background-color: {% if analysis_result.score >= 70 %}#28a745{% elif analysis_result.score >= 50 %}#ffc107{% else %}#dc3545{% endif %};"
+                             aria-valuenow="{{ analysis_result.score }}" aria-valuemin="0" aria-valuemax="100">
+                            {{ analysis_result.score }}%
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-8">
+                    <h5>Suggestions for Improvement</h5>
+                    {% for section in analysis_result.sections %}
+                    <div class="alert {% if section.severity == 'high' %}severity-high{% elif section.severity == 'medium' %}severity-medium{% else %}severity-low{% endif %} mb-2">
+                        <strong>{{ section.name }}:</strong> {{ section.advice }}
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+    
+    <!-- Upload Form -->
+    <div class="card shadow">
+        <div class="card-body">
+            <h4>Upload Your Resume</h4>
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                {% crispy form %}
+                <button type="submit" class="btn btn-primary-custom btn-lg">
+                    <i class="bi bi-upload"></i> Analyze Resume
+                </button>
+            </form>
+        </div>
+    </div>
+    
+    <!-- Recent Analyses -->
+    {% if recent_analyses %}
+    <div class="mt-5">
+        <h4>Your Recent Analyses</h4>
+        <div class="list-group">
+            {% for analysis in recent_analyses %}
+            <div class="list-group-item">
+                <div class="d-flex justify-content-between">
+                    <span>Score: <strong>{{ analysis.score }}/100</strong></span>
+                    <small class="text-muted">{{ analysis.created_at|date:"M d, Y H:i" }}</small>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
