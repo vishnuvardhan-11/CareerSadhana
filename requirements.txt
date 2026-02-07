@@ -1,0 +1,39 @@
+# Core Django
+Django==4.2.7
+django-environ==0.11.2
+
+# Database
+mysqlclient==2.2.0
+
+# Web Server
+gunicorn==21.2.0
+
+# Forms and Security
+django-crispy-forms==2.1
+crispy-bootstrap5==0.7
+
+# Rate Limiting
+django-ratelimit==4.1.0
+
+# File Handling
+python-magic==0.4.27
+python-docx==1.1.0
+PyPDF2==3.0.1
+
+# HTTP Requests (for ATS API)
+requests==2.31.0
+
+# Background Tasks (Optional - for heavy processing)
+# celery==5.3.4
+# redis==5.0.1
+
+# Testing
+pytest==7.4.3
+pytest-django==4.7.0
+coverage==7.3.2
+
+# Production
+whitenoise==6.6.0  # Static file serving
+
+# Development
+django-debug-toolbar==4.2.0
