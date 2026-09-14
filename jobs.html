@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Jobs – CareerSadhana</title>
+<link rel="stylesheet" href="static/css/main.css">
+<style>
+/* ── JOBS PAGE STYLES ── */
+.jobs-hero{background:linear-gradient(135deg,#0B3D91 0%,#0d47a1 50%,#1a237e 100%);padding:64px 24px 48px;text-align:center}
+.jobs-hero h1{font-family:'Sora',sans-serif;font-size:clamp(28px,5vw,48px);font-weight:800;color:#fff;margin-bottom:12px}
+.jobs-hero h1 span{color:#FF6A00}
+.jobs-hero p{color:rgba(255,255,255,0.8);font-size:17px;max-width:560px;margin:0 auto 32px}
+.search-bar{display:flex;gap:12px;max-width:600px;margin:0 auto;flex-wrap:wrap}
+.search-bar input{flex:1;min-width:200px;padding:14px 20px;border-radius:12px;border:none;background:rgba(255,255,255,0.12);color:#fff;font-size:15px;backdrop-filter:blur(8px)}
+.search-bar input::placeholder{color:rgba(255,255,255,0.6)}
+.search-bar input:focus{outline:2px solid #FF6A00}
+.search-bar button{padding:14px 28px;background:#FF6A00;border:none;border-radius:12px;color:#fff;font-family:'Sora',sans-serif;font-weight:700;font-size:15px;cursor:pointer;white-space:nowrap}
+
+.jobs-container{max-width:1100px;margin:0 auto;padding:40px 24px}
+.tabs{display:flex;gap:8px;margin-bottom:32px;flex-wrap:wrap}
+.tab-btn{padding:10px 28px;border-radius:99px;border:2px solid #e2e8f0;background:#fff;font-family:'Sora',sans-serif;font-weight:700;font-size:14px;cursor:pointer;transition:all 0.2s;color:#64748b}
+.tab-btn.active{background:#0B3D91;border-color:#0B3D91;color:#fff}
+.tab-btn.pvt.active{background:#FF6A00;border-color:#FF6A00}
+
+.jobs-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:20px}
+.job-card{background:#fff;border:1.5px solid #e2e8f0;border-radius:16px;padding:24px;transition:all 0.25s;cursor:pointer;position:relative;overflow:hidden}
+.job-card::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg,#0B3D91,#FF6A00)}
+.job-card.pvt::before{background:linear-gradient(90deg,#FF6A00,#e65c00)}
+.job-card:hover{transform:translateY(-4px);box-shadow:0 16px 40px rgba(0,0,0,0.12);border-color:#0B3D91}
+.job-card.pvt:hover{border-color:#FF6A00}
+.job-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:14px;gap:12px}
+.job-title{font-family:'Sora',sans-serif;font-weight:700;font-size:15px;color:#1e293b;line-height:1.4;flex:1}
+.job-badge{padding:4px 10px;border-radius:99px;font-size:11px;font-weight:700;white-space:nowrap}
+.badge-gov{background:#dbeafe;color:#1e40af}
+.badge-pvt{background:#ffedd5;color:#c2410c}
+.job-company{font-size:14px;color:#FF6A00;font-weight:600;margin-bottom:6px}
+.job-meta{display:flex;gap:16px;margin-bottom:14px;flex-wrap:wrap}
+.job-meta-item{font-size:13px;color:#64748b;display:flex;align-items:center;gap:4px}
+.job-tags{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px}
+.job-tag{padding:3px 10px;background:#f1f5f9;border-radius:6px;font-size:11px;color:#475569;font-weight:500}
+.deadline{font-size:12px;font-weight:700;padding:5px 12px;border-radius:8px;display:inline-block;margin-bottom:14px}
+.deadline.active{background:#dcfce7;color:#16a34a}
+.deadline.soon{background:#fef9c3;color:#a16207}
+.deadline.expired{background:#fee2e2;color:#dc2626}
+.btn-apply{display:block;width:100%;padding:12px;background:linear-gradient(135deg,#0B3D91,#1565C0);border:none;border-radius:10px;color:#fff;font-family:'Sora',sans-serif;font-weight:700;font-size:14px;text-align:center;text-decoration:none;cursor:pointer;transition:all 0.2s}
+.btn-apply.pvt{background:linear-gradient(135deg,#FF6A00,#e65c00)}
+.btn-apply:hover{opacity:0.9;transform:translateY(-1px)}
+.pagination{display:flex;gap:8px;justify-content:center;margin-top:40px;flex-wrap:wrap}
+.pg-btn{width:40px;height:40px;border-radius:10px;border:2px solid #e2e8f0;background:#fff;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;font-family:'Sora',sans-serif;transition:all 0.2s;font-size:14px}
+.pg-btn.active{background:#0B3D91;border-color:#0B3D91;color:#fff}
+.pg-btn:hover:not(.active){border-color:#0B3D91;color:#0B3D91}
+.jobs-count{color:#64748b;font-size:14px;margin-bottom:16px}
+.no-jobs{text-align:center;padding:60px 20px;color:#94a3b8}
+.no-jobs div{font-size:48px;margin-bottom:12px}
+
+
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="main-nav">
+  <a class="logo" href="index.html">
+    <img src="static/images/logo.png" alt="CareerSadhana Logo" id="logo-img">
+    <span class="logo-text"><span class="career">Career</span><span class="sadhana">Sadhana</span></span>
+  </a>
+  <button class="hamburger" id="hamburger" onclick="toggleMobileMenu()">&#9776;</button>
+  <div class="nav-links" id="nav-links">
+    <a class="nav-btn" href="index.html">Home</a>
+    <a class="nav-btn" href="ats.html">ATS Checker</a>
+    <a class="nav-btn active" href="jobs.html">Jobs</a>
+    <a class="nav-btn" href="versant.html">Versant Test</a>
+    <a class="nav-btn" href="ai-interview.html">AI Interview</a>
+    <a class="nav-btn" href="blogs.html">Blogs</a>
+    <a class="nav-btn" href="about.html">About</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="jobs-hero">
+  <h1>Find Your <span>Dream Job</span></h1>
+  <p>Explore curated government and private sector opportunities across India.</p>
+  <div class="search-bar">
+    <input type="text" id="search-input" placeholder="🔍 Search jobs, companies, locations..." oninput="renderJobs()">
+    <button onclick="renderJobs()">Search</button>
+  </div>
+</section>
+
+<!-- JOBS SECTION -->
+<div class="jobs-container">
+  <div class="tabs">
+    <button class="tab-btn active" onclick="switchTab('gov',this)">🏛 Government Jobs</button>
+    <button class="tab-btn pvt" onclick="switchTab('pvt',this)">💼 Private Jobs</button>
+  </div>
+  <div class="jobs-count" id="jobs-count"></div>
+  <div class="jobs-grid" id="jobs-grid"></div>
+  <div class="pagination" id="pagination"></div>
+</div>
+
+<!-- FOOTER -->
+<footer style="background:#0B3D91;color:rgba(255,255,255,0.7);text-align:center;padding:24px;font-size:13px;margin-top:60px">
+  © 2025 CareerSadhana · <a href="privacy.html" style="color:#FF6A00">Privacy</a> · <a href="terms.html" style="color:#FF6A00">Terms</a>
+</footer>
+
+<script src="static/js/jobs-data.js"></script>
+<script>
+// ── STATE ──────────────────────────────────────────────────────
+let currentTab = 'gov';
+let currentPage = 1;
+const PER_PAGE = 9;
+
+// ── ESCAPE HELPER (fixes XSS: job fields used to be injected into
+//    innerHTML unescaped) ──────────────────────────────────────
+function esc(str) {
+  return String(str == null ? '' : str).replace(/[&<>"']/g, (c) => ({
+    '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
+  }[c]));
+}
+function safeUrl(u) {
+  if (!u) return '#';
+  try {
+    const parsed = new URL(u, window.location.href);
+    return (parsed.protocol === 'http:' || parsed.protocol === 'https:') ? parsed.href : '#';
+  } catch { return '#'; }
+}
+
+// ── JOBS SOURCE ──────────────────────────────────────────────────
+// Built-in demo jobs (static/js/jobs-data.js) merged with jobs added by
+// a real admin through the Admin Dashboard, which are now stored in a
+// real database via /api/jobs — visible to every visitor, not just the
+// admin's own browser like before.
+let dbJobs = { gov: [], pvt: [] };
+
+async function loadDbJobs() {
+  try {
+    const res = await fetch('/api/jobs');
+    const data = await res.json();
+    const jobs = data.jobs || [];
+    dbJobs = { gov: [], pvt: [] };
+    jobs.forEach(j => {
+      const type = j.type === 'pvt' ? 'pvt' : 'gov';
+      dbJobs[type].push({
+        id: j.id, title: j.title, company: j.company, location: j.location,
+        deadline: j.deadline ? String(j.deadline).slice(0,10) : null,
+        url: j.url, tags: j.tags || []
+      });
+    });
+  } catch (e) {
+    // Backend not deployed/configured yet — silently fall back to the
+    // built-in demo list below so the page still works.
+  }
+  renderJobs();
+}
+
+function getAllJobs(type) {
+  return [...(dbJobs[type] || []), ...(JOBS_DATA[type] || [])];
+}
+
+// ── DEADLINE STATUS ─────────────────────────────────────────────
+function deadlineStatus(dl) {
+  if (!dl) return {label:'Open', cls:'active'};
+  const d = new Date(dl), now = new Date();
+  const diff = Math.ceil((d - now) / 86400000);
+  if (diff < 0) return {label:`Closed`, cls:'expired'};
+  if (diff <= 7) return {label:`Closes in ${diff}d`, cls:'soon'};
+  return {label:`Apply by ${d.toLocaleDateString('en-IN',{day:'2-digit',month:'short'})}`, cls:'active'};
+}
+
+// ── FILTER & RENDER ─────────────────────────────────────────────
+function renderJobs() {
+  const q = (document.getElementById('search-input').value || '').toLowerCase();
+  let jobs = getAllJobs(currentTab);
+
+  if (q) {
+    jobs = jobs.filter(j =>
+      (j.title+j.company+j.location+(j.tags||[]).join(' ')).toLowerCase().includes(q)
+    );
+  }
+
+  const total = jobs.length;
+  const pages = Math.ceil(total / PER_PAGE);
+  if (currentPage > pages) currentPage = 1;
+
+  const slice = jobs.slice((currentPage-1)*PER_PAGE, currentPage*PER_PAGE);
+  const isPvt = currentTab === 'pvt';
+
+  document.getElementById('jobs-count').textContent = `${total} job${total!==1?'s':''} found`;
+
+  const grid = document.getElementById('jobs-grid');
+  if (!slice.length) {
+    grid.innerHTML = `<div class="no-jobs" style="grid-column:1/-1"><div>🔍</div>No jobs found. Try a different search.</div>`;
+  } else {
+    grid.innerHTML = slice.map(j => {
+      const dl = deadlineStatus(j.deadline);
+      return `
+      <div class="job-card${isPvt?' pvt':''}">
+        <div class="job-header">
+          <div class="job-title">${esc(j.title)}</div>
+          <span class="job-badge ${isPvt?'badge-pvt':'badge-gov'}">${isPvt?'Private':'Govt'}</span>
+        </div>
+        <div class="job-company">🏢 ${esc(j.company)}</div>
+        <div class="job-meta">
+          <span class="job-meta-item">📍 ${esc(j.location)}</span>
+        </div>
+        <div class="job-tags">${(j.tags||[]).map(t=>`<span class="job-tag">${esc(t)}</span>`).join('')}</div>
+        <div class="deadline ${dl.cls}">🗓 ${esc(dl.label)}</div>
+        <a href="${esc(safeUrl(j.url))}" target="_blank" rel="noopener noreferrer" class="btn-apply${isPvt?' pvt':''}">Apply Now →</a>
+      </div>`;
+    }).join('');
+  }
+
+  // Pagination
+  const pg = document.getElementById('pagination');
+  if (pages <= 1) { pg.innerHTML=''; return; }
+  let btns = '';
+  for (let i=1;i<=pages;i++) {
+    btns += `<button class="pg-btn${i===currentPage?' active':''}" onclick="gotoPage(${i})">${i}</button>`;
+  }
+  pg.innerHTML = btns;
+}
+
+function switchTab(tab, btn) {
+  currentTab = tab;
+  currentPage = 1;
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderJobs();
+}
+
+function gotoPage(p) { currentPage=p; renderJobs(); window.scrollTo({top:400,behavior:'smooth'}); }
+
+// ── INIT ──────────────────────────────────────────────────────
+loadDbJobs();
+</script>
+<script src="static/js/main.js"></script>
+</body>
+</html>

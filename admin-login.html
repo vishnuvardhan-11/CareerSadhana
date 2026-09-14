@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Login – CareerSadhana</title>
+<link rel="icon" href="static/images/favicon.ico" type="image/x-icon">
+<link rel="stylesheet" href="static/css/main.css">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+<style>
+.al-wrap{min-height:calc(100vh - 64px);display:flex;align-items:center;justify-content:center;padding:40px 20px;background:var(--bg)}
+.al-card{background:#fff;border:1px solid var(--border);border-radius:16px;box-shadow:var(--shadow-lg);padding:36px;max-width:400px;width:100%}
+.al-card h1{font-family:'Sora',sans-serif;font-size:22px;margin-bottom:6px;color:var(--navy)}
+.al-card p{color:var(--muted);font-size:14px;margin-bottom:24px}
+.al-field{margin-bottom:14px}
+.al-field label{display:block;font-size:13px;font-weight:600;color:var(--text);margin-bottom:6px}
+.al-field input{width:100%;padding:12px 14px;border:2px solid var(--border);border-radius:10px;font-size:14px;font-family:'DM Sans',sans-serif}
+.al-field input:focus{outline:none;border-color:var(--navy)}
+.al-err{color:#dc2626;font-size:13px;min-height:18px;margin-bottom:10px}
+.al-btn{width:100%;padding:13px;background:var(--navy);color:#fff;border:none;border-radius:10px;font-family:'Sora',sans-serif;font-weight:700;font-size:15px;cursor:pointer}
+.al-btn:hover{background:var(--navy-dark)}
+.al-btn[disabled]{opacity:.6;cursor:not-allowed}
+.al-note{margin-top:18px;font-size:12px;color:var(--muted);text-align:center;line-height:1.6}
+</style>
+</head>
+<body>
+
+<nav id="main-nav">
+  <a class="logo" href="index.html">
+    <img src="static/images/logo.png" alt="CareerSadhana Logo" id="logo-img">
+    <span class="logo-text"><span class="career">Career</span><span class="sadhana">Sadhana</span></span>
+  </a>
+  <div class="nav-links"><a class="nav-btn" href="index.html">Home</a></div>
+</nav>
+
+<div class="al-wrap">
+  <div class="al-card">
+    <h1>🔒 Admin Login</h1>
+    <p>Sign in with your administrator account. This page talks to a real, server-side authenticated API — there is no password stored in this page's code.</p>
+    <div class="al-field">
+      <label for="al-email">Admin email</label>
+      <input type="email" id="al-email" placeholder="admin@yourcompany.com" autocomplete="username">
+    </div>
+    <div class="al-field">
+      <label for="al-pass">Password</label>
+      <input type="password" id="al-pass" placeholder="••••••••" autocomplete="current-password" onkeydown="if(event.key==='Enter')adminLogin()">
+    </div>
+    <div class="al-err" id="al-err"></div>
+    <button class="al-btn" id="al-btn" onclick="adminLogin()">Sign In →</button>
+    <p class="al-note">No admin account yet? See <code>SETUP.md</code> in the project for how to create the first admin securely via <code>/api/auth?action=bootstrap-admin</code>.</p>
+  </div>
+</div>
+
+<script>
+async function adminLogin() {
+  const email = document.getElementById('al-email').value.trim();
+  const pass  = document.getElementById('al-pass').value;
+  const err   = document.getElementById('al-err');
+  const btn   = document.getElementById('al-btn');
+  err.textContent = '';
+  if (!email || !pass) { err.textContent = 'Enter your email and password.'; return; }
+
+  btn.disabled = true; btn.textContent = 'Signing in…';
+  try {
+    const res = await fetch('/api/auth?action=login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
+      body: JSON.stringify({ email, password: pass })
+    });
+    const data = await res.json();
+    if (!res.ok) {
+      err.textContent = data.error || 'Login failed.';
+      btn.disabled = false; btn.textContent = 'Sign In →';
+      return;
+    }
+    if (data.user.role !== 'admin') {
+      err.textContent = 'This account is not an administrator.';
+      btn.disabled = false; btn.textContent = 'Sign In →';
+      // Log the user out of this non-admin session immediately —
+      // this page must never leave a session behind that could later
+      // be mistaken for admin access.
+      fetch('/api/auth?action=logout', { method: 'POST', credentials: 'include' });
+      return;
+    }
+    window.location.href = 'admin.html';
+  } catch (e) {
+    err.textContent = 'Could not reach the server. Is the backend deployed and DATABASE_URL configured?';
+    btn.disabled = false; btn.textContent = 'Sign In →';
+  }
+}
+</script>
+</body>
+</html>

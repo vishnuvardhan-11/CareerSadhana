@@ -1,0 +1,20 @@
+{
+  "name": "careersadhana",
+  "version": "2.0.0",
+  "private": true,
+  "description": "CareerSadhana — Full-stack application with frontend, backend API, database, ATS checker, Versant test, proctored AI interviews, and Admin Dashboard.",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js",
+    "py-start": "python app.py",
+    "test": "python test_fullstack.py"
+  },
+  "engines": {
+    "node": ">=18.x"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "jsonwebtoken": "^9.0.2",
+    "pg": "^8.11.5"
+  }
+}

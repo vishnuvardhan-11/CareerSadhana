@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ATS Score Checker – CareerSadhana</title>
+  <meta name="description" content="Check how well your resume matches a job description using our AI-powered ATS analyzer.">
+  <link rel="icon" href="static/images/favicon.ico" type="image/x-icon">
+  <link rel="stylesheet" href="static/css/main.css">
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<nav id="main-nav">
+  <a class="logo" href="index.html">
+    <img src="static/images/logo.png" alt="CareerSadhana Logo" id="logo-img">
+    <span class="logo-text"><span class="career">Career</span><span class="sadhana">Sadhana</span></span>
+  </a>
+  <button class="hamburger" id="hamburger" onclick="toggleMobileMenu()">&#9776;</button>
+  <div class="nav-links" id="nav-links">
+    <a class="nav-btn " href="index.html">Home</a>
+    <a class="nav-btn active" href="ats.html">ATS Checker</a>
+    <a class="nav-btn " href="jobs.html">Jobs</a>
+    <a class="nav-btn " href="versant.html">Versant Test</a>
+    <a class="nav-btn " href="ai-interview.html">AI Interview</a>
+    <a class="nav-btn " href="blogs.html">Blogs</a>
+    <a class="nav-btn " href="about.html">About</a>
+  </div>
+</nav>
+
+<div class="page-hero">
+  <div class="container">
+    <h1>ATS Score Checker</h1>
+    <p>Paste the job description and your resume to get a real keyword match score with actionable improvement tips</p>
+  </div>
+</div>
+
+<div class="container" style="max-width:860px;padding:2rem 1rem">
+
+  <!-- FORM CARD -->
+  <div class="card" id="ats-form-card">
+    <div class="form-group">
+      <label class="form-label">Job Description <span style="color:var(--orange)">*</span></label>
+      <p class="form-hint">Paste the full job posting including required skills, responsibilities, and qualifications</p>
+      <textarea id="jd-input" class="form-textarea" rows="8" placeholder="e.g. We are looking for a Software Engineer with experience in Python, Django, REST APIs, SQL databases, Git, and Agile methodologies. The candidate should have strong communication skills and the ability to work in a fast-paced environment..."></textarea>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Upload Resume (PDF or DOCX, max 5MB)</label>
+      <div class="upload-zone" id="upload-zone" onclick="document.getElementById('resume-file').click()">
+        <div style="font-size:2.5rem;margin-bottom:.75rem">📎</div>
+        <p><strong>Click to upload</strong> or drag &amp; drop</p>
+        <p style="margin-top:.3rem;font-size:.85rem;color:var(--muted)">PDF, DOCX, DOC supported</p>
+        <input type="file" id="resume-file" accept=".pdf,.doc,.docx" style="display:none" onchange="handleResumeFile(this)">
+      </div>
+      <div id="file-name-display" class="file-name-display" style="display:none"></div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Or Paste Your Resume Text</label>
+      <p class="form-hint">Include your skills, work experience, education, and certifications</p>
+      <textarea id="resume-text" class="form-textarea" rows="8" placeholder="e.g. John Doe | Software Engineer&#10;Skills: Python, Django, REST API, SQL, Git, Agile, JavaScript, React&#10;Experience: 3 years at TechCorp – built scalable web applications using Python and Django..."></textarea>
+    </div>
+    <div style="background:var(--light-navy);border-radius:10px;padding:1rem;margin-bottom:1.5rem;font-size:.875rem;color:var(--navy)">
+      🔒 <strong>Privacy Notice:</strong> Your resume is analyzed in real-time and never stored on our servers. Files are deleted immediately after analysis.
+    </div>
+    <button class="btn-primary btn-full" onclick="analyzeATS()" id="ats-btn">
+      <span id="ats-btn-text">🔍 Analyze My Resume</span>
+    </button>
+  </div>
+
+  <!-- LOADING STATE -->
+  <div id="ats-loading" class="card" style="display:none;text-align:center;padding:3rem">
+    <div class="loading-spinner"></div>
+    <h3 style="margin:1rem 0 .5rem;font-family:'Sora',sans-serif">Analyzing Your Resume...</h3>
+    <p style="color:var(--muted)">Matching keywords, skills, and formatting against the job description</p>
+    <div class="loading-bar"><div class="loading-fill" id="load-fill"></div></div>
+    <div id="load-status" style="margin-top:.75rem;font-size:.85rem;color:var(--muted)">Extracting keywords from job description...</div>
+  </div>
+
+  <!-- RESULT -->
+  <div id="ats-result" style="display:none"></div>
+  <button id="ats-reset-btn" onclick="resetATS()" class="btn-outline" style="display:none;margin-top:1rem">← Analyze Another Resume</button>
+</div>
+
+<footer>
+  <div class="footer-bottom"><p>© 2025 CareerSadhana. All rights reserved.</p></div>
+</footer>
+
+<script src="static/js/main.js"></script>
+<script src="static/js/ats.js"></script>
+</body>
+</html>

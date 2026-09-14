@@ -1,0 +1,472 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Dashboard – CareerSadhana</title>
+<link rel="icon" href="static/images/favicon.ico" type="image/x-icon">
+<link rel="stylesheet" href="static/css/main.css">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+<style>
+body{background:#f4f7ff}
+.ad-top{background:var(--navy);color:#fff;padding:16px 28px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:64px;z-index:50}
+.ad-top h1{font-family:'Sora',sans-serif;font-size:18px}
+.ad-badge{background:rgba(255,106,0,.25);border:1px solid rgba(255,106,0,.5);padding:3px 10px;border-radius:99px;font-size:12px;font-weight:700;margin-left:10px}
+.ad-body{max-width:1200px;margin:0 auto;padding:24px}
+.ad-tabs{display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap}
+.ad-tab{padding:9px 18px;border-radius:99px;border:2px solid var(--border);background:#fff;font-family:'Sora',sans-serif;font-weight:700;font-size:13px;cursor:pointer;color:var(--muted)}
+.ad-tab.active{background:var(--navy);border-color:var(--navy);color:#fff}
+.ad-panel{display:none;background:#fff;border:1px solid var(--border);border-radius:14px;padding:20px;overflow-x:auto}
+.ad-panel.active{display:block}
+.ad-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:14px;margin-bottom:20px}
+.stat-box{background:#fff;border:1px solid var(--border);border-radius:12px;padding:16px;text-align:center}
+.stat-box .n{font-family:'Sora',sans-serif;font-weight:800;font-size:24px;color:var(--navy)}
+.stat-box .l{font-size:12px;color:var(--muted);margin-top:2px}
+table.dt{width:100%;border-collapse:collapse;font-size:13px;min-width:700px}
+table.dt th{background:#f1f5f9;text-align:left;padding:10px 12px;font-family:'Sora',sans-serif;font-size:11px;text-transform:uppercase;color:var(--muted);white-space:nowrap}
+table.dt td{padding:10px 12px;border-bottom:1px solid var(--border);vertical-align:top}
+.chip{padding:2px 9px;border-radius:99px;font-size:11px;font-weight:700}
+.chip.ok{background:#dcfce7;color:#16a34a}
+.chip.bad{background:#fee2e2;color:#dc2626}
+.chip.admin{background:#ffedd5;color:#c2410c}
+.chip.user{background:#e8efff;color:var(--navy)}
+.chip.published{background:#dcfce7;color:#16a34a}
+.chip.draft{background:#f1f5f9;color:#64748b}
+.link-btn{background:none;border:none;color:var(--navy);font-weight:700;cursor:pointer;text-decoration:underline;font-size:13px}
+.msg{padding:40px;text-align:center;color:var(--muted)}
+.al-modal{position:fixed;inset:0;background:rgba(0,0,0,.6);display:none;align-items:center;justify-content:center;z-index:300;padding:20px}
+.al-modal.open{display:flex}
+.al-modal-inner{background:#fff;border-radius:16px;max-width:860px;width:100%;max-height:90vh;overflow-y:auto;padding:28px}
+.al-modal-inner h2{font-family:'Sora',sans-serif;color:var(--navy);margin-bottom:14px}
+.evt-row{padding:8px 10px;border-bottom:1px solid var(--border);font-size:12px;display:flex;justify-content:space-between;gap:10px}
+.qa-block{border:1px solid var(--border);border-radius:10px;padding:12px;margin-bottom:10px}
+.qa-block .q{font-weight:700;font-size:13px;margin-bottom:4px}
+.qa-block .a{font-size:13px;color:var(--muted)}
+.add-form{display:grid;gap:10px;margin-bottom:20px;max-width:640px}
+.add-form input,.add-form select,.add-form textarea{padding:10px 12px;border:2px solid var(--border);border-radius:8px;font-size:14px;font-family:'DM Sans',sans-serif}
+.add-form textarea{resize:vertical;min-height:120px}
+.add-form .row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.btn-sm{padding:8px 16px;border:none;border-radius:8px;background:var(--orange);color:#fff;font-weight:700;cursor:pointer;font-size:13px}
+.btn-sm.secondary{background:var(--navy)}
+.btn-del-sm{padding:5px 10px;border:none;border-radius:6px;background:#fee2e2;color:#dc2626;font-weight:700;cursor:pointer;font-size:12px}
+.btn-dl{padding:6px 12px;border:2px solid var(--navy);border-radius:6px;background:#fff;color:var(--navy);font-weight:700;cursor:pointer;font-size:12px;margin-right:6px}
+.btn-dl:hover{background:var(--navy);color:#fff}
+.report-box{background:#f0f9ff;border-radius:10px;padding:14px;margin-bottom:16px}
+</style>
+</head>
+<body>
+
+<nav id="main-nav">
+  <a class="logo" href="index.html">
+    <img src="static/images/logo.png" alt="CareerSadhana Logo" id="logo-img">
+    <span class="logo-text"><span class="career">Career</span><span class="sadhana">Sadhana</span></span>
+  </a>
+  <div class="nav-links"><a class="nav-btn" href="index.html">Back to Site</a></div>
+</nav>
+
+<div class="ad-top">
+  <h1>&#9881;&#65039; Admin Dashboard <span class="ad-badge" id="who">…</span></h1>
+  <button class="link-btn" style="color:#fff" onclick="adminLogout()">Logout</button>
+</div>
+
+<div id="gate-msg" class="msg" style="display:none"></div>
+
+<div id="ad-app" style="display:none">
+<div class="ad-body">
+  <div class="ad-tabs">
+    <button class="ad-tab active" onclick="showTab('overview',this)">&#128202; Overview</button>
+    <button class="ad-tab" onclick="showTab('users',this)">&#128100; Users</button>
+    <button class="ad-tab" onclick="showTab('logins',this)">&#128336; Login History</button>
+    <button class="ad-tab" onclick="showTab('interviews',this)">&#127908; AI Interviews</button>
+    <button class="ad-tab" onclick="showTab('jobs',this)">&#128188; Jobs</button>
+    <button class="ad-tab" onclick="showTab('blogs',this)">&#128221; Blogs</button>
+  </div>
+
+  <div class="ad-panel active" id="tab-overview">
+    <div class="ad-stats" id="overview-stats"></div>
+    <p style="color:var(--muted);font-size:13px">This dashboard reads live data from the database via <code>/api/admin?resource=*</code> endpoints, which are only reachable with a valid admin session cookie.</p>
+  </div>
+
+  <div class="ad-panel" id="tab-users">
+    <div id="users-wrap" class="msg">Loading…</div>
+  </div>
+
+  <div class="ad-panel" id="tab-logins">
+    <div id="logins-wrap" class="msg">Loading…</div>
+  </div>
+
+  <div class="ad-panel" id="tab-interviews">
+    <div id="interviews-wrap" class="msg">Loading…</div>
+  </div>
+
+  <div class="ad-panel" id="tab-jobs">
+    <h3 style="font-family:'Sora',sans-serif;margin-bottom:12px">Add a Job</h3>
+    <div class="add-form">
+      <div class="row">
+        <select id="j-type"><option value="gov">&#127963; Government</option><option value="pvt">&#128188; Private</option></select>
+        <input id="j-title" placeholder="Job title *">
+      </div>
+      <div class="row">
+        <input id="j-company" placeholder="Company *">
+        <input id="j-location" placeholder="Location *">
+      </div>
+      <div class="row">
+        <input id="j-deadline" type="date">
+        <input id="j-url" type="url" placeholder="Apply URL (https://...)">
+      </div>
+      <input id="j-tags" placeholder="Tags, comma separated">
+      <button class="btn-sm" onclick="addJob()">&#10133; Add Job</button>
+      <div id="j-msg" style="font-size:13px;color:#16a34a;display:none">&#9989; Added</div>
+    </div>
+    <h3 style="font-family:'Sora',sans-serif;margin-bottom:12px">Manage Jobs</h3>
+    <div id="jobs-wrap" class="msg">Loading…</div>
+  </div>
+
+  <div class="ad-panel" id="tab-blogs">
+    <h3 style="font-family:'Sora',sans-serif;margin-bottom:4px" id="blog-form-heading">Publish New Article</h3>
+    <div class="add-form" id="blog-form">
+      <input type="hidden" id="b-edit-id" value="">
+      <input id="b-title" placeholder="Article title *">
+      <div class="row">
+        <select id="b-category">
+          <option value="AI &amp; Technology">AI &amp; Technology</option>
+          <option value="Career Tips">Career Tips</option>
+          <option value="Hiring Drives">Hiring Drives</option>
+          <option value="Tech Innovations">Tech Innovations</option>
+          <option value="Career Opportunities">Career Opportunities</option>
+          <option value="General">General</option>
+        </select>
+        <div class="row" style="align-items:center;gap:10px">
+          <select id="b-status"><option value="published">Published</option><option value="draft">Draft</option></select>
+          <input id="b-emoji" placeholder="Emoji e.g. 🚀" style="max-width:80px">
+        </div>
+      </div>
+      <input id="b-excerpt" placeholder="Short excerpt / summary (shown on card)">
+      <input id="b-tags" placeholder="Tags, comma separated e.g. AI, Career, 2026">
+      <textarea id="b-content" placeholder="Article content (HTML supported e.g. &lt;h3&gt;, &lt;p&gt;, &lt;ul&gt;)"></textarea>
+      <div style="display:flex;gap:10px;flex-wrap:wrap">
+        <button class="btn-sm" onclick="saveBlog()">&#128190; Save Article</button>
+        <button class="btn-sm secondary" onclick="cancelBlogEdit()" id="b-cancel" style="display:none">Cancel Edit</button>
+      </div>
+      <div id="b-msg" style="font-size:13px;color:#16a34a;display:none">&#9989; Saved</div>
+    </div>
+    <h3 style="font-family:'Sora',sans-serif;margin:20px 0 12px">All Articles</h3>
+    <div id="blogs-wrap" class="msg">Loading…</div>
+  </div>
+</div>
+</div>
+
+<!-- Interview detail modal -->
+<div class="al-modal" id="iv-modal">
+  <div class="al-modal-inner">
+    <h2>&#127908; Interview Session Report</h2>
+    <div id="iv-detail"></div>
+    <div style="margin-top:16px;display:flex;gap:10px;flex-wrap:wrap" id="iv-actions"></div>
+    <button class="link-btn" style="display:block;margin-top:12px" onclick="document.getElementById('iv-modal').classList.remove('open')">Close</button>
+  </div>
+</div>
+
+<script>
+var _ivData = null;
+
+async function api(path, opts) {
+  opts = opts || {};
+  var res = await fetch(path, Object.assign({ credentials: 'include' }, opts));
+  var data = await res.json().catch(function(){ return {}; });
+  if (!res.ok) throw new Error(data.error || ('Request failed: ' + res.status));
+  return data;
+}
+function esc(s){ return String(s==null?'':s).replace(/[&<>"']/g,function(c){return({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]);}); }
+function fmt(d){ return d ? new Date(d).toLocaleString('en-IN', {dateStyle:'medium', timeStyle:'short'}) : '—'; }
+
+async function init() {
+  try {
+    var me = await api('/api/auth?action=me');
+    if (!me.user || me.user.role !== 'admin') {
+      document.getElementById('gate-msg').style.display = 'block';
+      document.getElementById('gate-msg').innerHTML = '&#128274; You must be signed in as an administrator to view this page. <a href="admin-login.html">Go to Admin Login</a>';
+      return;
+    }
+    document.getElementById('who').textContent = me.user.email;
+    document.getElementById('ad-app').style.display = 'block';
+    loadOverview(); loadUsers(); loadLogins(); loadInterviews(); loadJobs(); loadBlogs();
+  } catch (e) {
+    document.getElementById('gate-msg').style.display = 'block';
+    document.getElementById('gate-msg').textContent = 'Could not verify admin session (' + e.message + '). Is the backend running?';
+  }
+}
+
+function showTab(name, btn) {
+  document.querySelectorAll('.ad-panel').forEach(function(p){ p.classList.remove('active'); });
+  document.getElementById('tab-'+name).classList.add('active');
+  document.querySelectorAll('.ad-tab').forEach(function(b){ b.classList.remove('active'); });
+  btn.classList.add('active');
+}
+
+async function adminLogout() {
+  await fetch('/api/auth?action=logout', { method:'POST', credentials:'include' });
+  window.location.href = 'admin-login.html';
+}
+
+async function loadOverview() {
+  try {
+    var results = await Promise.all([
+      api('/api/admin?resource=users'),
+      api('/api/admin?resource=login-history&pageSize=1'),
+      api('/api/admin?resource=interviews'),
+      api('/api/admin?resource=blogs')
+    ]);
+    var u = results[0], l = results[1], iv = results[2], bl = results[3];
+    var completed = iv.sessions.filter(function(s){ return s.status==='completed'; }).length;
+    var pubBlogs = (bl.blogs||[]).filter(function(b){ return b.status==='published'; }).length;
+    document.getElementById('overview-stats').innerHTML =
+      '<div class="stat-box"><div class="n">' + u.users.length + '</div><div class="l">Registered Users</div></div>' +
+      '<div class="stat-box"><div class="n">' + l.total + '</div><div class="l">Total Login Attempts</div></div>' +
+      '<div class="stat-box"><div class="n">' + iv.sessions.length + '</div><div class="l">Interview Sessions</div></div>' +
+      '<div class="stat-box"><div class="n">' + completed + '</div><div class="l">Completed Interviews</div></div>' +
+      '<div class="stat-box"><div class="n">' + pubBlogs + '</div><div class="l">Published Blogs</div></div>';
+  } catch(e) { document.getElementById('overview-stats').innerHTML = '<div class="msg">' + esc(e.message) + '</div>'; }
+}
+
+async function loadUsers() {
+  var wrap = document.getElementById('users-wrap');
+  try {
+    var d = await api('/api/admin?resource=users');
+    var users = d.users;
+    if (!users.length) { wrap.innerHTML = '<div class="msg">No users yet.</div>'; return; }
+    wrap.innerHTML = '<table class="dt"><thead><tr><th>Name</th><th>Email</th><th>Role</th><th>Joined</th><th>Logins</th><th>Last Login</th><th>Action</th></tr></thead><tbody>' +
+      users.map(function(u){
+        return '<tr><td>' + esc(u.name) + '</td><td>' + esc(u.email) + '</td>' +
+          '<td><span class="chip ' + (u.role==='admin'?'admin':'user') + '">' + esc(u.role) + '</span></td>' +
+          '<td>' + fmt(u.created_at) + '</td><td>' + u.login_count + '</td><td>' + fmt(u.last_login) + '</td>' +
+          '<td>' + (u.role !== 'admin' ? '<button class="btn-del-sm" onclick="delUser(' + u.id + ',\'' + esc(u.name) + '\')">Delete</button>' : '<span style="color:var(--muted);font-size:12px">Protected</span>') + '</td></tr>';
+      }).join('') +
+      '</tbody></table>';
+  } catch(e) { wrap.innerHTML = '<div class="msg">' + esc(e.message) + '</div>'; }
+}
+
+async function delUser(id, name) {
+  if (!confirm('Delete user "' + name + '"?\n\nThis will permanently remove their account and all associated data. This cannot be undone.')) return;
+  try {
+    await api('/api/admin?resource=users&id=' + encodeURIComponent(id), { method: 'DELETE' });
+    loadUsers();
+    loadOverview();
+  } catch(e) { alert('Could not delete user: ' + e.message); }
+}
+
+async function loadLogins() {
+  var wrap = document.getElementById('logins-wrap');
+  try {
+    var d = await api('/api/admin?resource=login-history&pageSize=100');
+    var entries = d.entries;
+    if (!entries.length) { wrap.innerHTML = '<div class="msg">No login attempts recorded yet.</div>'; return; }
+    wrap.innerHTML = '<table class="dt"><thead><tr><th>Timestamp</th><th>Email</th><th>Role</th><th>Result</th><th>Reason</th><th>IP Address</th><th>User Agent</th></tr></thead><tbody>' +
+      entries.map(function(e){
+        return '<tr><td>' + fmt(e.created_at) + '</td><td>' + esc(e.email) + '</td><td>' + esc(e.role||'—') + '</td>' +
+          '<td><span class="chip ' + (e.success?'ok':'bad') + '">' + (e.success?'Success':'Failed') + '</span></td>' +
+          '<td>' + esc(e.reason||'—') + '</td><td>' + esc(e.ip_address||'—') + '</td>' +
+          '<td style="max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">' + esc(e.user_agent||'—') + '</td></tr>';
+      }).join('') +
+      '</tbody></table>';
+  } catch(e) { wrap.innerHTML = '<div class="msg">' + esc(e.message) + '</div>'; }
+}
+
+async function loadInterviews() {
+  var wrap = document.getElementById('interviews-wrap');
+  try {
+    var d = await api('/api/admin?resource=interviews');
+    var sessions = d.sessions;
+    if (!sessions.length) { wrap.innerHTML = '<div class="msg">No interview sessions yet.</div>'; return; }
+    wrap.innerHTML = '<table class="dt"><thead><tr><th>Candidate</th><th>Mode</th><th>Status</th><th>Score</th><th>Violations</th><th>Events</th><th>Started</th><th></th></tr></thead><tbody>' +
+      sessions.map(function(s){
+        return '<tr><td>' + esc(s.name||s.email||'—') + '</td><td>' + esc(s.mode) + '</td>' +
+          '<td><span class="chip ' + (s.status==='completed'?'ok':(s.status==='terminated'?'bad':'user')) + '">' + esc(s.status) + '</span></td>' +
+          '<td>' + (s.overall_score!=null ? s.overall_score+'%' : '—') + '</td>' +
+          '<td>' + s.violation_count + '</td><td>' + s.event_count + '</td>' +
+          '<td>' + fmt(s.started_at) + '</td>' +
+          '<td><button class="link-btn" onclick="viewInterview(\'' + esc(s.id) + '\')">View</button></td></tr>';
+      }).join('') +
+      '</tbody></table>';
+  } catch(e) { wrap.innerHTML = '<div class="msg">' + esc(e.message) + '</div>'; }
+}
+
+async function viewInterview(id) {
+  var box = document.getElementById('iv-detail');
+  var actions = document.getElementById('iv-actions');
+  box.innerHTML = 'Loading…';
+  actions.innerHTML = '';
+  document.getElementById('iv-modal').classList.add('open');
+  try {
+    var d = await api('/api/admin?resource=interview-detail&id=' + encodeURIComponent(id));
+    var session = d.session, qa = d.qa, events = d.events, report = d.report;
+    _ivData = d;
+    var html = '<p><strong>' + esc(session.name||session.email) + '</strong> &middot; ' + esc(session.mode) + ' &middot; status: ' + esc(session.status) + '</p>' +
+      '<p style="font-size:12px;color:var(--muted);margin-bottom:14px">Started ' + fmt(session.started_at) + ' &middot; Ended ' + fmt(session.ended_at) + ' &middot; Violations: ' + session.violation_count + ' &middot; IP: ' + esc(session.ip_address||'—') + '</p>';
+    if (report) {
+      html += '<div class="report-box">' +
+        '<strong>AI Report &mdash; Overall Score: ' + (report.overall_score!=null ? report.overall_score+'%' : 'N/A') + '</strong>' +
+        '<p style="font-size:13px;margin-top:6px">' + esc(report.summary||'') + '</p></div>';
+    }
+    html += '<h3 style="font-family:\'Sora\',sans-serif;margin:12px 0">Questions &amp; Answers</h3>';
+    html += qa.length ? qa.map(function(q){ return '<div class="qa-block"><div class="q">Q' + (q.q_index+1) + ': ' + esc(q.question) + '</div><div class="a">' + esc(q.answer||'(no answer recorded)') + '</div></div>'; }).join('') : '<p class="msg">No Q&A recorded.</p>';
+    html += '<h3 style="font-family:\'Sora\',sans-serif;margin:12px 0">Tracking Events</h3>';
+    html += events.length ? events.map(function(e){ return '<div class="evt-row"><span>' + esc(e.event_type) + (e.detail?' — '+esc(JSON.stringify(e.detail)):'') + '</span><span>' + fmt(e.created_at) + '</span></div>'; }).join('') : '<p class="msg">No tracking events.</p>';
+    box.innerHTML = html;
+    // Download buttons
+    actions.innerHTML =
+      '<button class="btn-dl" onclick="downloadReportPrint()">&#128438; Print / Save PDF</button>' +
+      '<button class="btn-dl" onclick="downloadReportJSON()">&#128190; Export JSON</button>';
+  } catch(e) { box.innerHTML = '<div class="msg">' + esc(e.message) + '</div>'; }
+}
+
+function downloadReportPrint() {
+  if (!_ivData) return;
+  var w = window.open('', '_blank');
+  var s = _ivData.session, q = _ivData.qa, r = _ivData.report;
+  var html = '<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Interview Report</title>' +
+    '<style>body{font-family:Arial,sans-serif;max-width:800px;margin:40px auto;color:#111}h1,h2{color:#0B3D91}' +
+    '.score{font-size:28px;font-weight:900;color:#FF6A00}.qa{border:1px solid #ddd;border-radius:8px;padding:12px;margin:10px 0}' +
+    '.q{font-weight:700}.a{color:#555;margin-top:6px}table{width:100%;border-collapse:collapse}td,th{border:1px solid #ddd;padding:8px}' +
+    '@media print{button{display:none}}</style></head><body>' +
+    '<h1>CareerSadhana — Interview Report</h1>' +
+    '<p><strong>Candidate:</strong> ' + esc(s.name||s.email) + '</p>' +
+    '<p><strong>Mode:</strong> ' + esc(s.mode) + ' &nbsp;|&nbsp; <strong>Status:</strong> ' + esc(s.status) + '</p>' +
+    '<p><strong>Date:</strong> ' + fmt(s.started_at) + '</p>' +
+    (r ? '<p class="score">Overall Score: ' + (r.overall_score!=null ? r.overall_score+'%' : 'N/A') + '</p>' +
+      '<p><strong>Summary:</strong> ' + esc(r.summary||'') + '</p>' : '') +
+    '<h2>Q&amp;A Transcript</h2>' +
+    q.map(function(qr,i){ return '<div class="qa"><div class="q">Q' + (i+1) + ': ' + esc(qr.question) + '</div><div class="a">' + esc(qr.answer||'(no answer)') + '</div></div>'; }).join('') +
+    '<p style="color:#999;font-size:12px;margin-top:40px">Generated by CareerSadhana Admin Dashboard &middot; ' + new Date().toLocaleString() + '</p>' +
+    '</body></html>';
+  w.document.write(html);
+  w.document.close();
+  w.print();
+}
+
+function downloadReportJSON() {
+  if (!_ivData) return;
+  var blob = new Blob([JSON.stringify(_ivData, null, 2)], { type: 'application/json' });
+  var a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'interview-report-' + (_ivData.session.id || 'export') + '.json';
+  a.click();
+}
+
+async function loadJobs() {
+  var wrap = document.getElementById('jobs-wrap');
+  try {
+    var d = await api('/api/admin?resource=jobs');
+    var jobs = d.jobs;
+    if (!jobs.length) { wrap.innerHTML = '<div class="msg">No admin-added jobs yet.</div>'; return; }
+    wrap.innerHTML = '<table class="dt"><thead><tr><th>Type</th><th>Title</th><th>Company</th><th>Location</th><th>Added</th><th></th></tr></thead><tbody>' +
+      jobs.map(function(j){
+        return '<tr><td>' + esc(j.type) + '</td><td>' + esc(j.title) + '</td><td>' + esc(j.company) + '</td><td>' + esc(j.location) + '</td>' +
+          '<td>' + fmt(j.created_at) + '</td>' +
+          '<td><button class="btn-del-sm" onclick="delJob(\'' + esc(j.id) + '\')">Delete</button></td></tr>';
+      }).join('') +
+      '</tbody></table>';
+  } catch(e) { wrap.innerHTML = '<div class="msg">' + esc(e.message) + '</div>'; }
+}
+
+async function addJob() {
+  var body = {
+    type: document.getElementById('j-type').value,
+    title: document.getElementById('j-title').value.trim(),
+    company: document.getElementById('j-company').value.trim(),
+    location: document.getElementById('j-location').value.trim(),
+    deadline: document.getElementById('j-deadline').value || null,
+    url: document.getElementById('j-url').value.trim(),
+    tags: document.getElementById('j-tags').value.trim(),
+  };
+  if (!body.title || !body.company || !body.location) { alert('Title, company and location are required.'); return; }
+  try {
+    await api('/api/admin?resource=jobs', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(body) });
+    ['j-title','j-company','j-location','j-deadline','j-url','j-tags'].forEach(function(id){ document.getElementById(id).value=''; });
+    var m = document.getElementById('j-msg'); m.style.display='block'; setTimeout(function(){ m.style.display='none'; }, 2500);
+    loadJobs();
+  } catch(e) { alert('Could not add job: ' + e.message); }
+}
+
+async function delJob(id) {
+  if (!confirm('Delete this job?')) return;
+  try { await api('/api/admin?resource=jobs&id=' + encodeURIComponent(id), { method:'DELETE' }); loadJobs(); }
+  catch(e) { alert('Could not delete job: ' + e.message); }
+}
+
+// ── BLOGS ──────────────────────────────────────────────────────────
+async function loadBlogs() {
+  var wrap = document.getElementById('blogs-wrap');
+  try {
+    var d = await api('/api/admin?resource=blogs');
+    var blogs = d.blogs || [];
+    if (!blogs.length) { wrap.innerHTML = '<div class="msg">No blog articles yet. Create one above.</div>'; return; }
+    wrap.innerHTML = '<table class="dt"><thead><tr><th>Title</th><th>Category</th><th>Status</th><th>Views</th><th>Published</th><th>Actions</th></tr></thead><tbody>' +
+      blogs.map(function(b){
+        return '<tr>' +
+          '<td>' + esc(b.title) + '</td>' +
+          '<td>' + esc(b.category) + '</td>' +
+          '<td><span class="chip ' + esc(b.status) + '">' + esc(b.status) + '</span></td>' +
+          '<td>' + (b.views||0) + '</td>' +
+          '<td>' + (b.published_at ? fmt(b.published_at) : '—') + '</td>' +
+          '<td>' +
+            '<button class="link-btn" onclick="editBlog(\'' + esc(b.id) + '\',\'' + esc(b.title.replace(/'/g,"&#39;")) + '\',\'' + esc(b.category) + '\',\'' + esc(b.status) + '\')">Edit</button> ' +
+            '<button class="btn-del-sm" onclick="delBlog(\'' + esc(b.id) + '\')">Delete</button>' +
+          '</td></tr>';
+      }).join('') +
+      '</tbody></table>';
+  } catch(e) { wrap.innerHTML = '<div class="msg">' + esc(e.message) + '</div>'; }
+}
+
+async function saveBlog() {
+  var editId = document.getElementById('b-edit-id').value;
+  var body = {
+    title: document.getElementById('b-title').value.trim(),
+    category: document.getElementById('b-category').value,
+    status: document.getElementById('b-status').value,
+    cover_emoji: document.getElementById('b-emoji').value.trim() || '📝',
+    excerpt: document.getElementById('b-excerpt').value.trim(),
+    tags: document.getElementById('b-tags').value.split(',').map(function(t){ return t.trim(); }).filter(Boolean),
+    content: document.getElementById('b-content').value.trim(),
+  };
+  if (!body.title || !body.content) { alert('Title and content are required.'); return; }
+  try {
+    if (editId) {
+      await api('/api/admin?resource=blogs&id=' + encodeURIComponent(editId), { method:'PUT', headers:{'Content-Type':'application/json'}, body: JSON.stringify(body) });
+    } else {
+      await api('/api/admin?resource=blogs', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(body) });
+    }
+    cancelBlogEdit();
+    var m = document.getElementById('b-msg'); m.style.display='block'; setTimeout(function(){ m.style.display='none'; }, 2500);
+    loadBlogs();
+    loadOverview();
+  } catch(e) { alert('Could not save blog: ' + e.message); }
+}
+
+function editBlog(id, title, category, status) {
+  document.getElementById('b-edit-id').value = id;
+  document.getElementById('b-title').value = title;
+  document.getElementById('b-category').value = category;
+  document.getElementById('b-status').value = status;
+  document.getElementById('blog-form-heading').textContent = 'Edit Article';
+  document.getElementById('b-cancel').style.display = 'inline-block';
+  document.getElementById('blog-form-heading').scrollIntoView({ behavior: 'smooth' });
+}
+
+function cancelBlogEdit() {
+  document.getElementById('b-edit-id').value = '';
+  ['b-title','b-excerpt','b-tags','b-content','b-emoji'].forEach(function(id){ document.getElementById(id).value=''; });
+  document.getElementById('b-status').value = 'published';
+  document.getElementById('blog-form-heading').textContent = 'Publish New Article';
+  document.getElementById('b-cancel').style.display = 'none';
+}
+
+async function delBlog(id) {
+  if (!confirm('Delete this blog article? This cannot be undone.')) return;
+  try { await api('/api/admin?resource=blogs&id=' + encodeURIComponent(id), { method:'DELETE' }); loadBlogs(); loadOverview(); }
+  catch(e) { alert('Could not delete blog: ' + e.message); }
+}
+
+init();
+</script>
+</body>
+</html>

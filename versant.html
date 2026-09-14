@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Versant English Test – CareerSadhana</title>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700;800&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* ══════════════════════════════════════════
+   ROOT & RESET
+══════════════════════════════════════════ */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --navy:#0B3D91;--orange:#FF6A00;
+  --bg:#07101f;--surf:#111827;--surf2:#1a2438;
+  --border:rgba(255,255,255,0.08);
+  --text:#f1f5f9;--muted:#94a3b8;
+  --r:16px;--r-sm:10px;
+  --shadow:0 8px 32px rgba(0,0,0,0.45);
+}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
+
+/* ══════════════════════════════════════════
+   SCREENS
+══════════════════════════════════════════ */
+[data-screen]{display:none;min-height:100vh;flex-direction:column;align-items:center;justify-content:center;padding:24px;position:relative}
+[data-screen]::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
+  background:radial-gradient(ellipse at 15% 20%,rgba(11,61,145,.35) 0%,transparent 50%),
+             radial-gradient(ellipse at 85% 80%,rgba(255,106,0,.18) 0%,transparent 50%)}
+[data-screen]>*{position:relative;z-index:1}
+
+/* ══════════════════════════════════════════
+   AUTH SCREEN
+══════════════════════════════════════════ */
+.auth-wrap{width:100%;max-width:440px}
+.auth-logo{text-align:center;margin-bottom:28px}
+.auth-logo img{height:50px}
+.auth-logo h1{font-family:'Sora',sans-serif;font-size:26px;font-weight:800;margin-top:10px}
+.auth-logo p{color:var(--muted);font-size:14px;margin-top:4px}
+.auth-card{background:var(--surf);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;box-shadow:var(--shadow)}
+.auth-tabs{display:flex;border-bottom:1px solid var(--border)}
+.auth-tab{flex:1;padding:15px;background:none;border:none;font-family:'Sora',sans-serif;font-size:14px;font-weight:700;color:var(--muted);cursor:pointer;transition:.2s}
+.auth-tab.active{color:var(--orange);border-bottom:2px solid var(--orange);background:rgba(255,106,0,.05)}
+.auth-panel{display:none;padding:28px}
+.auth-panel.active{display:block}
+.fg{margin-bottom:16px}
+.fg label{display:block;font-size:13px;color:var(--muted);margin-bottom:6px;font-weight:500}
+.fg input{width:100%;padding:12px 16px;background:var(--surf2);border:1.5px solid var(--border);border-radius:var(--r-sm);color:var(--text);font-family:'DM Sans',sans-serif;font-size:15px;transition:.2s}
+.fg input:focus{outline:none;border-color:var(--orange);box-shadow:0 0 0 3px rgba(255,106,0,.12)}
+.auth-err{color:#f72585;font-size:13px;min-height:18px;margin-bottom:12px}
+.btn-p{width:100%;padding:14px;background:linear-gradient(135deg,var(--navy),var(--orange));border:none;border-radius:var(--r-sm);color:#fff;font-family:'Sora',sans-serif;font-size:15px;font-weight:700;cursor:pointer;transition:.2s;letter-spacing:.3px}
+.btn-p:hover{opacity:.9;transform:translateY(-1px)}
+.admin-hint{text-align:center;margin-top:14px;font-size:12px;color:var(--muted);padding:10px 14px;background:rgba(255,255,255,.03);border-radius:8px;border:1px solid var(--border)}
+.admin-hint code{background:rgba(255,255,255,.08);padding:2px 6px;border-radius:4px;font-family:'JetBrains Mono',monospace;font-size:11px}
+
+/* ══════════════════════════════════════════
+   USER DASHBOARD
+══════════════════════════════════════════ */
+#screen-dashboard{justify-content:flex-start;align-items:stretch;padding:0}
+.dash-nav{width:100%;background:rgba(17,24,39,.97);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:14px 32px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
+.dash-nav-logo{display:flex;align-items:center;gap:12px}
+.dash-nav-logo img{height:36px}
+.dash-nav-logo span{font-family:'Sora',sans-serif;font-weight:800;font-size:17px}
+.dash-user{display:flex;align-items:center;gap:16px}
+.dash-user-info{text-align:right}
+.dash-user-name{font-family:'Sora',sans-serif;font-weight:700;font-size:14px}
+.dash-user-email{font-size:12px;color:var(--muted)}
+.btn-logout{padding:8px 18px;background:rgba(247,37,133,.12);border:1px solid rgba(247,37,133,.3);color:#f72585;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;transition:.2s}
+.btn-logout:hover{background:rgba(247,37,133,.22)}
+.dash-body{width:100%;max-width:760px;margin:0 auto;padding:40px 24px}
+.dash-hi{font-family:'Sora',sans-serif;font-size:28px;font-weight:800;margin-bottom:4px}
+.dash-sub{color:var(--muted);font-size:15px;margin-bottom:32px}
+.sect-label{font-family:'Sora',sans-serif;font-size:12px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:14px}
+
+/* Part cards */
+.dpc{display:flex;align-items:center;gap:16px;background:var(--surf);border:1px solid var(--border);border-radius:var(--r);padding:18px 20px;margin-bottom:10px;cursor:pointer;transition:.2s}
+.dpc:hover{border-color:rgba(255,106,0,.4);transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.3)}
+.dpc-icon{width:48px;height:48px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0}
+.dpc-body{flex:1}
+.dpc-title{font-family:'Sora',sans-serif;font-weight:700;font-size:15px}
+.dpc-meta{color:var(--muted);font-size:13px;margin-top:2px}
+.dpc-right{display:flex;flex-direction:column;align-items:flex-end;gap:5px}
+.dpc-score{font-family:'Sora',sans-serif;font-weight:800;font-size:22px}
+.dpc-badge{padding:3px 10px;border-radius:99px;font-family:'Sora',sans-serif;font-weight:700;font-size:12px}
+.dpc-cta{color:var(--orange);font-weight:700;font-size:14px}
+
+/* CEFR reference strip */
+.cefr-strip{display:flex;gap:8px;margin-top:24px;flex-wrap:wrap}
+.cs-item{flex:1;min-width:80px;background:var(--surf);border:1px solid var(--border);border-radius:12px;padding:12px 8px;text-align:center}
+.cs-lbl{font-family:'Sora',sans-serif;font-weight:800;font-size:20px}
+.cs-rng{font-size:11px;color:var(--muted);margin-top:3px}
+
+/* Result card */
+.result-card{background:var(--surf);border:2px solid;border-radius:20px;padding:28px;margin-top:24px}
+.rc-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+.rc-title{font-family:'Sora',sans-serif;font-weight:800;font-size:17px}
+.btn-retake{padding:8px 18px;background:var(--surf2);border:1px solid var(--border);color:var(--text);border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;transition:.2s}
+.btn-retake:hover{background:rgba(255,255,255,.08)}
+.rc-score{font-family:'Sora',sans-serif;font-size:64px;font-weight:800;line-height:1;text-align:center}
+.rc-grade{display:inline-block;padding:6px 20px;border-radius:99px;font-family:'Sora',sans-serif;font-weight:800;font-size:15px;color:#fff;margin:10px auto 20px;display:block;text-align:center;max-width:280px}
+.rc-parts{background:var(--surf2);border-radius:12px;overflow:hidden;margin-bottom:16px}
+.rc-row{display:flex;align-items:center;gap:10px;padding:12px 16px;border-bottom:1px solid var(--border)}
+.rc-row:last-child{border-bottom:none}
+.rc-row span:first-child{flex:1;font-size:14px}
+.mini-badge{padding:3px 9px;border-radius:99px;font-family:'Sora',sans-serif;font-weight:700;font-size:11px}
+.rc-cefr{background:var(--surf2);border-radius:12px;padding:16px;margin-top:12px}
+.cefr-title{font-family:'Sora',sans-serif;font-weight:700;font-size:13px;color:var(--muted);margin-bottom:10px;text-transform:uppercase;letter-spacing:1px}
+.cefr-row{display:flex;align-items:center;gap:10px;padding:8px 12px;border-radius:8px;font-size:13px;border:1px solid transparent;margin-bottom:4px}
+.cefr-row.highlight{background:rgba(var(--gc-r,67,97,238),.1);border-color:var(--gc,var(--navy))}
+.cefr-row b{min-width:28px;font-weight:800}
+.cefr-row span:nth-child(2){flex:1;color:var(--muted)}
+.cefr-range{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--muted)}
+
+/* ══════════════════════════════════════════
+   ADMIN DASHBOARD
+══════════════════════════════════════════ */
+#screen-admin{justify-content:flex-start;align-items:stretch;padding:0}
+.admin-nav{width:100%;background:rgba(17,24,39,.97);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:14px 32px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
+.admin-nav-left{display:flex;align-items:center;gap:12px}
+.admin-nav-left img{height:36px}
+.admin-badge{background:rgba(255,106,0,.2);color:var(--orange);border:1px solid rgba(255,106,0,.4);padding:3px 10px;border-radius:99px;font-family:'Sora',sans-serif;font-weight:800;font-size:12px}
+.admin-body{width:100%;max-width:1100px;margin:0 auto;padding:36px 24px}
+.admin-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:28px;flex-wrap:gap}
+.admin-title{font-family:'Sora',sans-serif;font-size:24px;font-weight:800}
+.admin-actions{display:flex;gap:10px;flex-wrap:wrap}
+.btn-export{display:inline-flex;align-items:center;gap:8px;padding:12px 22px;background:linear-gradient(135deg,#16a34a,#15803d);border:none;border-radius:10px;color:#fff;font-family:'Sora',sans-serif;font-weight:700;font-size:14px;cursor:pointer;transition:.2s}
+.btn-export:hover{opacity:.9;transform:translateY(-1px)}
+.btn-clear{display:inline-flex;align-items:center;gap:8px;padding:12px 22px;background:rgba(239,68,68,.12);border:1px solid rgba(239,68,68,.3);border-radius:10px;color:#ef4444;font-family:'Sora',sans-serif;font-weight:700;font-size:14px;cursor:pointer;transition:.2s}
+.btn-clear:hover{background:rgba(239,68,68,.22)}
+
+/* Stats */
+.admin-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:14px;margin-bottom:24px}
+.stat-box{padding:20px 22px;border-radius:14px;border:1px solid var(--border)}
+.stat-box.blue{background:rgba(67,97,238,.12);border-color:rgba(67,97,238,.3)}
+.stat-box.green{background:rgba(22,163,74,.12);border-color:rgba(22,163,74,.3)}
+.stat-box.orange{background:rgba(255,106,0,.12);border-color:rgba(255,106,0,.3)}
+.stat-box.purple{background:rgba(114,9,183,.12);border-color:rgba(114,9,183,.3)}
+.stat-n{font-family:'Sora',sans-serif;font-weight:800;font-size:32px}
+.stat-l{font-size:13px;color:var(--muted);margin-top:4px}
+
+/* Table */
+.table-scroll{overflow-x:auto;border-radius:14px;border:1px solid var(--border)}
+.admin-table{width:100%;border-collapse:collapse;font-size:13px;min-width:800px}
+.admin-table th{background:var(--surf2);padding:12px 14px;text-align:left;font-family:'Sora',sans-serif;font-weight:700;font-size:12px;letter-spacing:.5px;text-transform:uppercase;color:var(--muted);border-bottom:1px solid var(--border);white-space:nowrap}
+.admin-table td{padding:12px 14px;border-bottom:1px solid var(--border);vertical-align:middle}
+.admin-table tr:last-child td{border-bottom:none}
+.admin-table tbody tr:hover{background:rgba(255,255,255,.02)}
+.email-cell{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--muted)}
+.grade-chip{padding:4px 10px;border-radius:99px;font-family:'Sora',sans-serif;font-weight:800;font-size:12px}
+.status-chip{padding:4px 10px;border-radius:99px;font-size:12px;font-weight:700}
+.status-chip.done{background:rgba(22,163,74,.15);color:#4ade80}
+.status-chip.prog{background:rgba(251,191,36,.15);color:#fbbf24}
+
+/* ══════════════════════════════════════════
+   INTRO SCREEN
+══════════════════════════════════════════ */
+.intro-card{background:var(--surf);border:1px solid var(--border);border-radius:24px;padding:48px 40px;text-align:center;max-width:560px;width:100%;box-shadow:var(--shadow)}
+.intro-icon{font-size:56px;margin-bottom:18px;animation:bounce 1.5s infinite}
+@keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+.intro-title{font-family:'Sora',sans-serif;font-size:26px;font-weight:800;margin-bottom:12px}
+.intro-desc{color:var(--muted);font-size:15px;line-height:1.6;margin-bottom:22px}
+.intro-meta{display:flex;justify-content:center;gap:16px;margin-bottom:22px;flex-wrap:wrap}
+.im-item{background:var(--surf2);border:1px solid var(--border);border-radius:10px;padding:10px 20px;font-family:'Sora',sans-serif;font-weight:700;font-size:14px;text-align:center}
+.im-item small{display:block;color:var(--muted);font-size:11px;font-weight:400;margin-top:3px}
+.intro-instr{background:rgba(255,106,0,.1);border:1px solid rgba(255,106,0,.25);border-radius:12px;padding:13px 18px;font-size:14px;color:#ffd1a8;margin-bottom:28px;line-height:1.55}
+.btn-begin{padding:16px 48px;background:linear-gradient(135deg,var(--navy),var(--orange));border:none;border-radius:14px;color:#fff;font-family:'Sora',sans-serif;font-size:16px;font-weight:800;cursor:pointer;transition:.25s;box-shadow:0 4px 20px rgba(255,106,0,.3)}
+.btn-begin:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(255,106,0,.4)}
+.lnk-back{margin-top:14px;background:none;border:none;color:var(--muted);font-size:13px;cursor:pointer}
+.lnk-back:hover{color:var(--text)}
+
+/* ══════════════════════════════════════════
+   TEST SCREEN
+══════════════════════════════════════════ */
+#screen-test{justify-content:flex-start;align-items:stretch;padding:0}
+.test-bar{width:100%;background:rgba(17,24,39,.97);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:12px 24px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;gap:16px}
+.test-part-label{font-family:'Sora',sans-serif;font-weight:800;font-size:15px;white-space:nowrap}
+.prog-bar{flex:1;height:6px;background:var(--surf2);border-radius:99px;overflow:hidden}
+.prog-fill{height:100%;border-radius:99px;transition:width .4s ease}
+.q-counter{font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--muted);white-space:nowrap}
+
+/* Fullscreen warning */
+#fs-warning{position:fixed;top:60px;left:0;right:0;background:rgba(247,37,133,.95);padding:12px 24px;display:none;align-items:center;justify-content:space-between;font-weight:600;font-size:14px;z-index:200}
+#fs-warning button{padding:6px 16px;border-radius:8px;background:#fff;color:#f72585;border:none;font-weight:700;cursor:pointer}
+
+/* Timer */
+.timer-wrap{position:fixed;top:70px;right:24px;z-index:99}
+.timer-ring{width:70px;height:70px;background:var(--surf);border:2px solid var(--border);border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:var(--shadow)}
+#timer-num{font-family:'JetBrains Mono',monospace;font-size:22px;font-weight:700;transition:.3s}
+
+/* Camera pip */
+.cam-pip{position:fixed;bottom:24px;right:24px;width:110px;height:82px;border-radius:12px;overflow:hidden;border:2px solid var(--border);box-shadow:var(--shadow);z-index:99}
+.cam-pip video{width:100%;height:100%;object-fit:cover;transform:scaleX(-1)}
+
+/* Question card */
+.test-body{flex:1;display:flex;align-items:center;justify-content:center;padding:32px 24px 120px}
+.q-card{background:var(--surf);border:1px solid var(--border);border-radius:22px;padding:36px;max-width:680px;width:100%;box-shadow:var(--shadow);animation:cardIn .3s ease}
+@keyframes cardIn{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+.qt-label{font-family:'Sora',sans-serif;font-weight:700;font-size:12px;letter-spacing:1.2px;text-transform:uppercase;color:var(--muted);margin-bottom:20px}
+
+/* Shared buttons */
+.btn-play{display:flex;align-items:center;gap:10px;padding:13px 28px;border:none;border-radius:12px;font-family:'Sora',sans-serif;font-weight:700;font-size:14px;cursor:pointer;transition:.2s;background:linear-gradient(135deg,var(--navy),#1565C0);color:#fff;box-shadow:0 4px 14px rgba(11,61,145,.4);margin:0 auto}
+.btn-play:hover{transform:translateY(-2px);opacity:.9}
+.btn-play:disabled{opacity:.35;cursor:not-allowed;transform:none}
+.btn-next{display:block;width:100%;margin-top:18px;padding:13px;background:linear-gradient(135deg,var(--orange),#e65c00);border:none;border-radius:12px;color:#fff;font-family:'Sora',sans-serif;font-weight:700;font-size:14px;cursor:pointer;transition:.2s}
+.btn-next:hover{opacity:.9}
+.btn-next:disabled{opacity:.3;cursor:not-allowed}
+
+/* Display boxes */
+.speak-box{background:var(--surf2);border:1px solid var(--border);border-radius:14px;padding:22px;text-align:center;font-family:'Sora',sans-serif;font-size:19px;font-weight:600;line-height:1.5;min-height:72px;display:flex;align-items:center;justify-content:center;margin-bottom:16px;color:var(--text)}
+.status-txt{color:var(--muted);font-size:14px;text-align:center;margin-bottom:18px}
+
+/* Build */
+.build-chips{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:18px}
+.build-chip{padding:9px 16px;border:2px dashed;border-radius:99px;font-family:'Sora',sans-serif;font-weight:600;font-size:14px}
+.build-correct{background:rgba(6,214,160,.1);border:1px solid rgba(6,214,160,.3);border-radius:12px;padding:12px 18px;font-family:'JetBrains Mono',monospace;font-size:13px;color:#06d6a0;margin-bottom:16px;min-height:44px}
+
+/* Convo */
+.convo-box{background:var(--surf2);border:1px solid var(--border);border-radius:14px;padding:18px;margin-bottom:16px}
+.convo-line{display:flex;gap:10px;margin-bottom:10px;align-items:flex-start}
+.convo-line:last-child{margin-bottom:0}
+.convo-sp{font-family:'Sora',sans-serif;font-weight:700;font-size:13px;color:var(--orange);min-width:82px;white-space:nowrap}
+.convo-txt{font-size:14px;line-height:1.55}
+.convo-q{background:rgba(67,97,238,.12);border:1px solid rgba(67,97,238,.3);border-radius:12px;padding:13px 18px;font-family:'Sora',sans-serif;font-weight:600;font-size:15px;color:#a5b4fc;margin-bottom:8px}
+.convo-hint{font-size:13px;color:var(--muted);font-style:italic;margin-bottom:18px}
+
+/* Type / Dictation */
+.type-display{background:var(--surf2);border:1px solid var(--border);border-radius:14px;padding:22px;font-family:'Sora',sans-serif;font-size:19px;font-weight:600;line-height:1.6;margin-bottom:20px;text-align:center}
+.type-inp{width:100%;padding:13px 18px;background:var(--surf2);border:2px solid var(--border);border-radius:12px;color:var(--text);font-family:'JetBrains Mono',monospace;font-size:17px;text-align:center;letter-spacing:.8px;transition:.2s}
+.type-inp:focus{outline:none;border-color:var(--orange)}
+.dict-inp{width:100%;padding:13px 18px;background:var(--surf2);border:2px solid var(--border);border-radius:12px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:15px;resize:none;min-height:80px;transition:.2s}
+.dict-inp:focus{outline:none;border-color:#06d6a0}
+
+/* Passage */
+.passage-phase{font-family:'Sora',sans-serif;font-weight:800;font-size:17px;margin-bottom:10px}
+.passage-instr{color:var(--muted);font-size:13px;margin-bottom:14px}
+.passage-txt{background:var(--surf2);border:1px solid var(--border);border-radius:14px;padding:22px;font-size:15px;line-height:1.8;margin-bottom:14px;max-height:230px;overflow-y:auto}
+.passage-hint{background:rgba(251,133,0,.08);border:1px dashed rgba(251,133,0,.3);border-radius:10px;padding:11px 16px;font-size:13px;color:#ffd1a8;margin-bottom:14px}
+.passage-write-inp{width:100%;min-height:160px;padding:14px 18px;background:var(--surf2);border:2px solid var(--border);border-radius:12px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:15px;line-height:1.7;resize:vertical;transition:.2s}
+.passage-write-inp:focus{outline:none;border-color:#fb8500}
+
+/* ══════════════════════════════════════════
+   PART RESULT SCREEN
+══════════════════════════════════════════ */
+.pr-card{background:var(--surf);border:1px solid var(--border);border-radius:24px;padding:36px;max-width:600px;width:100%;box-shadow:var(--shadow)}
+.pr-top{text-align:center;margin-bottom:28px}
+.pr-big-icon{font-size:52px;margin-bottom:12px}
+.pr-pname{font-family:'Sora',sans-serif;font-size:14px;font-weight:700;color:var(--muted);margin-bottom:8px}
+.pr-score{font-family:'Sora',sans-serif;font-size:72px;font-weight:800;line-height:1}
+.pr-grade{display:inline-block;padding:7px 24px;border-radius:99px;font-family:'Sora',sans-serif;font-weight:800;font-size:15px;color:#fff;margin-top:10px}
+.pr-sect{font-family:'Sora',sans-serif;font-weight:700;font-size:12px;letter-spacing:1.2px;text-transform:uppercase;color:var(--muted);margin-bottom:10px;margin-top:22px}
+.pr-parts-list{background:var(--surf2);border-radius:12px;overflow:hidden}
+.pr-row{display:flex;align-items:center;gap:10px;padding:11px 16px;border-bottom:1px solid var(--border);font-size:13px}
+.pr-row:last-child{border-bottom:none}
+.pr-row span:first-child{flex:1}
+.pr-row.current{background:rgba(255,106,0,.07)}
+.pr-final{background:var(--surf2);border:2px solid;border-radius:16px;padding:24px;text-align:center;margin-top:20px}
+.pf-label{font-size:12px;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
+.pf-score{font-family:'Sora',sans-serif;font-size:60px;font-weight:800;line-height:1}
+.pf-grade{display:inline-block;padding:6px 20px;border-radius:99px;font-family:'Sora',sans-serif;font-weight:800;font-size:14px;color:#fff;margin:10px auto}
+.pf-hint{font-size:13px;color:var(--muted);margin-top:10px}
+.pr-next-hint{background:rgba(255,106,0,.1);border:1px solid rgba(255,106,0,.25);border-radius:12px;padding:14px 18px;font-size:14px;color:#ffd1a8;margin-top:18px;text-align:center}
+.btn-pr-next{display:block;width:100%;margin-top:22px;padding:15px;background:linear-gradient(135deg,var(--navy),var(--orange));border:none;border-radius:14px;color:#fff;font-family:'Sora',sans-serif;font-weight:800;font-size:15px;cursor:pointer;transition:.2s}
+.btn-pr-next:hover{opacity:.9;transform:translateY(-1px)}
+
+/* ══════════════════════════════════════════
+   TOAST
+══════════════════════════════════════════ */
+.vs-toast{position:fixed;top:20px;left:50%;transform:translateX(-50%);padding:11px 22px;border-radius:12px;font-family:'Sora',sans-serif;font-weight:700;font-size:14px;z-index:999;animation:tin .3s ease;box-shadow:0 8px 24px rgba(0,0,0,.4);white-space:nowrap}
+@keyframes tin{from{opacity:0;transform:translateX(-50%) translateY(-10px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
+.vs-toast-warn{background:#fb8500;color:#fff}
+.vs-toast-err{background:#f72585;color:#fff}
+.vs-toast-info{background:linear-gradient(135deg,var(--navy),var(--orange));color:#fff}
+
+/* ══════════════════════════════════════════
+   RESPONSIVE
+══════════════════════════════════════════ */
+@media(max-width:640px){
+  .q-card,.intro-card,.pr-card{padding:24px 18px}
+  .test-bar{padding:10px 14px}
+  .timer-wrap{top:62px;right:12px}
+  .cam-pip{width:80px;height:60px;bottom:12px;right:12px}
+  .rc-score,.pr-score,.pf-score{font-size:52px}
+  .dash-nav{padding:12px 18px}
+  .admin-body{padding:24px 16px}
+  .admin-top{flex-direction:column;align-items:flex-start;gap:14px}
+}
+</style>
+</head>
+<body>
+
+<!-- ════════════════════════════════════════
+     1. AUTH SCREEN
+════════════════════════════════════════ -->
+<div id="screen-auth" data-screen style="display:flex">
+  <div class="auth-wrap">
+    <div class="auth-logo">
+      <img src="static/images/logo.png" alt="CareerSadhana">
+      <h1><span style="color:var(--navy)">Career</span><span style="color:var(--orange)">Sadhana</span></h1>
+      <p>Versant English Proficiency Test</p>
+    </div>
+    <div class="auth-card">
+      <div class="auth-tabs">
+        <button class="auth-tab active" data-tab="si">Sign In</button>
+        <button class="auth-tab" data-tab="su">Create Account</button>
+      </div>
+
+      <!-- Sign In -->
+      <div class="auth-panel active" id="si-panel">
+        <div class="fg"><label>Email Address</label>
+          <input type="email" id="si-email" placeholder="you@example.com" autocomplete="email"></div>
+        <div class="fg"><label>Password</label>
+          <input type="password" id="si-pass" placeholder="••••••••" onkeydown="if(event.key==='Enter')doSignin()"></div>
+        <div style="text-align:right;margin-top:-6px;margin-bottom:10px">
+          <button onclick="openForgotPassword()" style="background:none;border:none;color:var(--orange);font-size:13px;cursor:pointer;text-decoration:underline">Forgot Password?</button>
+        </div>
+        <div class="auth-err" id="si-err"></div>
+        <button class="btn-p" onclick="doSignin()">Sign In &rarr;</button>
+      </div>
+
+      <!-- Sign Up -->
+      <div class="auth-panel" id="su-panel">
+        <div class="fg"><label>Full Name</label>
+          <input type="text" id="su-name" placeholder="Your full name"></div>
+        <div class="fg"><label>Email Address</label>
+          <input type="email" id="su-email" placeholder="you@example.com"></div>
+        <div class="fg"><label>Password (min 6 characters)</label>
+          <input type="password" id="su-pass" placeholder="••••••••" onkeydown="if(event.key==='Enter')doSignup()"></div>
+        <div class="auth-err" id="su-err"></div>
+        <button class="btn-p" onclick="doSignup()">Create Account →</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════
+     2. USER DASHBOARD
+════════════════════════════════════════ -->
+<div id="screen-dashboard" data-screen style="display:none;justify-content:flex-start;align-items:stretch;padding:0">
+  <nav class="dash-nav">
+    <div class="dash-nav-logo">
+      <img src="static/images/logo.png" alt="CS">
+      <span><b style="color:var(--navy)">Career</b><b style="color:var(--orange)">Sadhana</b></span>
+    </div>
+    <div class="dash-user">
+      <div class="dash-user-info">
+        <div class="dash-user-name" id="dash-name"></div>
+        <div class="dash-user-email" id="dash-email"></div>
+      </div>
+      <button class="btn-logout" onclick="doLogout()">Log Out</button>
+    </div>
+  </nav>
+  <div class="dash-body">
+    <div class="dash-hi" id="dash-name">Welcome!</div>
+    <div class="dash-sub">Complete all 6 parts to receive your CEFR English proficiency grade.</div>
+    <div class="sect-label">Test Parts</div>
+    <div id="dash-parts"></div>
+    <div id="dash-result" style="display:none"></div>
+    <div class="sect-label" style="margin-top:28px">CEFR Grade Scale</div>
+    <div class="cefr-strip">
+      <div class="cs-item"><div class="cs-lbl" style="color:#06d6a0">C2</div><div class="cs-rng">79–100</div><div style="font-size:11px;color:var(--muted)">Mastery</div></div>
+      <div class="cs-item"><div class="cs-lbl" style="color:#4cc9f0">C1</div><div class="cs-rng">69–78</div><div style="font-size:11px;color:var(--muted)">Advanced</div></div>
+      <div class="cs-item"><div class="cs-lbl" style="color:#4361ee">B2</div><div class="cs-rng">58–68</div><div style="font-size:11px;color:var(--muted)">Upper Int.</div></div>
+      <div class="cs-item"><div class="cs-lbl" style="color:#7209b7">B1</div><div class="cs-rng">48–57</div><div style="font-size:11px;color:var(--muted)">Intermediate</div></div>
+      <div class="cs-item"><div class="cs-lbl" style="color:#f72585">A2</div><div class="cs-rng">≤47</div><div style="font-size:11px;color:var(--muted)">Elementary</div></div>
+    </div>
+    <div style="margin-top:24px;text-align:center">
+      <a href="index.html" style="color:var(--muted);font-size:13px;text-decoration:none">← Back to Home</a>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════
+     3. ADMIN DASHBOARD
+════════════════════════════════════════ -->
+<div id="screen-admin" data-screen style="display:none;justify-content:flex-start;align-items:stretch;padding:0">
+  <nav class="admin-nav">
+    <div class="admin-nav-left">
+      <img src="static/images/logo.png" alt="CS">
+      <span style="font-family:'Sora',sans-serif;font-weight:800;font-size:17px"><b style="color:var(--navy)">Career</b><b style="color:var(--orange)">Sadhana</b></span>
+      <span class="admin-badge">⚙️ ADMIN</span>
+    </div>
+    <button class="btn-logout" onclick="doLogout()">Log Out</button>
+  </nav>
+  <div class="admin-body">
+    <div class="admin-top">
+      <div class="admin-title">📊 Student Score Dashboard</div>
+      <div class="admin-actions">
+        <button class="btn-export" id="btn-export" onclick="exportExcel()" style="display:none">
+          📥 Export to Excel (CSV)
+        </button>
+        <button class="btn-clear" id="btn-clear" onclick="clearAllData()" style="display:none">
+          🗑 Clear All Data
+        </button>
+      </div>
+    </div>
+    <div id="admin-table-wrap"></div>
+    <div style="margin-top:20px;padding:16px 20px;background:rgba(255,106,0,.06);border:1px solid rgba(255,106,0,.2);border-radius:12px;font-size:13px;color:var(--muted)">
+      💡 <strong style="color:var(--text)">How to open in Excel:</strong> Click "Export to Excel (CSV)" → the file downloads automatically → open it in Microsoft Excel or Google Sheets.
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════
+     4. PART INTRO SCREEN
+════════════════════════════════════════ -->
+<div id="screen-intro" data-screen style="display:none">
+  <div class="intro-card">
+    <div class="intro-icon" id="intro-icon">🔁</div>
+    <h2 class="intro-title" id="intro-title">Part A: Repeat</h2>
+    <p class="intro-desc" id="intro-desc"></p>
+    <div class="intro-meta">
+      <div class="im-item" id="intro-count">16 Questions<small>Questions</small></div>
+      <div class="im-item" id="intro-time">15s each<small>Per Question</small></div>
+    </div>
+    <div class="intro-instr" id="intro-instr"></div>
+    <button class="btn-begin" onclick="beginTest()">🎬 Begin Test</button>
+    <button class="lnk-back" onclick="showUserDashboard()">← Back to Dashboard</button>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════
+     5. TEST SCREEN
+════════════════════════════════════════ -->
+<div id="screen-test" data-screen style="display:none;justify-content:flex-start;align-items:stretch;padding:0">
+  <!-- Top bar -->
+  <div class="test-bar">
+    <div class="test-part-label" id="test-part-label">Part A</div>
+    <div class="prog-bar"><div class="prog-fill" id="prog-fill"></div></div>
+    <div class="q-counter" id="q-counter">1 / 16</div>
+  </div>
+
+  <!-- Fullscreen warning -->
+  <div id="fs-warning">
+    ⚠️ You exited fullscreen! Return to fullscreen to continue.
+    <button onclick="document.documentElement.requestFullscreen()">Re-enter Fullscreen</button>
+  </div>
+
+  <!-- Timer -->
+  <div class="timer-wrap">
+    <div class="timer-ring"><div id="timer-num">--</div></div>
+  </div>
+
+  <!-- Camera -->
+  <div class="cam-pip"><video id="cam-video" autoplay muted playsinline></video></div>
+
+  <!-- Question body -->
+  <div class="test-body">
+    <div class="q-card">
+
+      <!-- PART A: SPEAK -->
+      <div id="qt-speak" data-qtype style="display:none">
+        <div class="qt-label">🔁 Part A — Repeat the Sentence</div>
+        <div class="speak-box" id="speak-display">Press PLAY to hear the sentence</div>
+        <div class="status-txt" id="speak-status"></div>
+        <button class="btn-play" id="btn-speak-play" onclick="playSpeak()">▶ Play Sentence</button>
+        <button class="btn-next" id="btn-speak-next" onclick="nextQ()" disabled>Next →</button>
+      </div>
+
+      <!-- PART B: BUILD -->
+      <div id="qt-build" data-qtype style="display:none">
+        <div class="qt-label">🧩 Part B — Sentence Builds</div>
+        <p style="font-size:13px;color:var(--muted);margin-bottom:14px">Listen to the word groups, then say the full sentence in the correct order:</p>
+        <div class="build-chips" id="build-parts"></div>
+<!-- answer hidden from student -->
+        <div class="status-txt" id="build-status"></div>
+        <button class="btn-play" id="btn-build-play" onclick="playBuild()">▶ Play Word Groups</button>
+        <button class="btn-next" id="btn-build-next" onclick="nextQ()" disabled>Next →</button>
+      </div>
+
+      <!-- PART C: CONVO -->
+      <div id="qt-convo" data-qtype style="display:none">
+        <div class="qt-label">💬 Part C — Conversation</div>
+        <div class="convo-box" id="convo-lines"></div>
+        <div class="convo-q" id="convo-q"></div>
+<!-- hint hidden from student -->
+        <div class="status-txt" id="convo-status"></div>
+        <button class="btn-play" id="btn-convo-play" onclick="playConvo()">▶ Play Conversation</button>
+        <button class="btn-next" id="btn-convo-next" onclick="nextQ()" disabled>Next →</button>
+      </div>
+
+      <!-- PART D: TYPE -->
+      <div id="qt-type" data-qtype style="display:none">
+        <div class="qt-label">✏️ Part D — Sentence Completion</div>
+        <p style="font-size:13px;color:var(--muted);margin-bottom:14px">Type ONE word to complete the sentence:</p>
+        <div class="type-display" id="type-sentence"></div>
+        <input class="type-inp" type="text" id="type-inp" placeholder="Type one word…"
+          onkeydown="if(event.key==='Enter')nextQ()"
+          autocomplete="off" autocorrect="off" spellcheck="false">
+        <button class="btn-next" onclick="nextQ()" style="margin-top:14px">Next →</button>
+      </div>
+
+      <!-- PART E: DICTATION -->
+      <div id="qt-dict" data-qtype style="display:none">
+        <div class="qt-label">🎧 Part E — Dictation</div>
+        <p style="font-size:13px;color:var(--muted);margin-bottom:14px">Listen, then type exactly what you heard:</p>
+        <div class="status-txt" id="dict-status"></div>
+        <button class="btn-play" id="btn-dict-play" onclick="playDict()">▶ Play Sentence</button>
+        <textarea class="dict-inp" id="dict-inp" rows="3"
+          placeholder="Type the sentence exactly as you heard it…"
+          spellcheck="false" autocorrect="off"></textarea>
+        <button class="btn-next" id="btn-dict-next" onclick="nextQ()" disabled style="margin-top:12px">Next →</button>
+      </div>
+
+      <!-- PART F: PASSAGE -->
+      <div id="qt-passage" data-qtype style="display:none">
+        <div class="passage-phase" id="passage-phase">📖 Reading Phase</div>
+        <div class="passage-instr" id="passage-instr"></div>
+        <div class="passage-txt" id="passage-box"></div>
+        <div id="passage-write" style="display:none">
+          <div class="passage-hint" id="passage-hint"></div>
+          <textarea class="passage-write-inp" id="passage-write-inp"
+            placeholder="Rewrite the passage in your own words…" spellcheck="true"></textarea>
+        </div>
+      </div>
+
+    </div><!-- /q-card -->
+  </div><!-- /test-body -->
+</div><!-- /screen-test -->
+
+<!-- ════════════════════════════════════════
+     6. PART RESULT SCREEN
+════════════════════════════════════════ -->
+<div id="screen-partresult" data-screen style="display:none">
+  <div class="pr-card">
+    <div class="pr-top">
+      <div class="pr-big-icon" id="pr-icon">🔁</div>
+      <div class="pr-pname" id="pr-pname">Part A: Repeat</div>
+      <div class="pr-score" id="pr-score">--</div>
+      <div class="pr-grade" id="pr-grade">--</div>
+    </div>
+    <div class="pr-sect">All Parts Progress</div>
+    <div class="pr-parts-list" id="pr-parts"></div>
+    <div id="pr-overall"></div>
+    <button class="btn-pr-next" id="pr-btn-next">Next Part →</button>
+    <div style="text-align:center;margin-top:14px">
+      <button onclick="showUserDashboard()" style="background:none;border:none;color:var(--muted);font-size:13px;cursor:pointer">← Back to Dashboard</button>
+    </div>
+  </div>
+</div>
+
+<script src="static/js/questions.js"></script>
+<script src="static/js/versant.js"></script>
+
+<!-- ════════════════════════════════════════
+     FORGOT PASSWORD MODAL
+════════════════════════════════════════ -->
+<div id="forgot-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:500;align-items:center;justify-content:center;padding:20px">
+  <div style="background:var(--surf);border:1px solid var(--border);border-radius:20px;padding:32px;max-width:420px;width:100%;box-shadow:var(--shadow)">
+    <h3 style="font-family:'Sora',sans-serif;font-weight:800;font-size:20px;margin-bottom:8px">🔑 Reset Password</h3>
+    <p style="color:var(--muted);font-size:14px;margin-bottom:20px">Enter your registered email. We'll show you a reset option.</p>
+    <div class="fg"><label>Email Address</label>
+      <input type="email" id="fp-email" placeholder="you@example.com" style="width:100%;padding:12px 16px;background:var(--surf2);border:1.5px solid var(--border);border-radius:var(--r-sm);color:var(--text);font-size:15px"></div>
+    <div id="fp-new-pass-wrap" style="display:none">
+      <div class="fg" style="margin-top:12px"><label>New Password</label>
+        <input type="password" id="fp-new-pass" placeholder="New password (min 6 chars)" style="width:100%;padding:12px 16px;background:var(--surf2);border:1.5px solid var(--border);border-radius:var(--r-sm);color:var(--text);font-size:15px"></div>
+      <div class="fg"><label>Confirm New Password</label>
+        <input type="password" id="fp-confirm-pass" placeholder="Confirm password" style="width:100%;padding:12px 16px;background:var(--surf2);border:1.5px solid var(--border);border-radius:var(--r-sm);color:var(--text);font-size:15px"></div>
+    </div>
+    <div id="fp-msg" style="font-size:13px;min-height:18px;margin-bottom:12px;color:#f72585"></div>
+    <div style="display:flex;gap:10px">
+      <button id="fp-btn" onclick="handleForgotPassword()" style="flex:1;padding:13px;background:linear-gradient(135deg,var(--navy),var(--orange));border:none;border-radius:var(--r-sm);color:#fff;font-family:'Sora',sans-serif;font-weight:700;font-size:14px;cursor:pointer">Find Account</button>
+      <button onclick="closeForgotPassword()" style="padding:13px 20px;background:var(--surf2);border:1px solid var(--border);border-radius:var(--r-sm);color:var(--muted);font-size:14px;cursor:pointer">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════
+     CAMERA PERMISSION MODAL
+════════════════════════════════════════ -->
+<div id="cam-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:400;align-items:center;justify-content:center;padding:20px">
+  <div style="background:var(--surf);border:1px solid var(--border);border-radius:20px;padding:36px;max-width:440px;width:100%;text-align:center;box-shadow:var(--shadow)">
+    <div style="font-size:52px;margin-bottom:16px">📷</div>
+    <h3 style="font-family:'Sora',sans-serif;font-weight:800;font-size:20px;margin-bottom:10px">Camera & Microphone Access</h3>
+    <p style="color:var(--muted);font-size:14px;line-height:1.6;margin-bottom:24px">This test requires your camera and microphone for proctoring.<br>Please click <strong style="color:var(--text)">Allow</strong> when your browser asks for permission.</p>
+    <div id="cam-status" style="padding:12px 18px;background:var(--surf2);border-radius:10px;font-size:14px;margin-bottom:20px;border:1px solid var(--border)">⏳ Waiting for permission…</div>
+    <div style="display:flex;gap:10px;flex-direction:column">
+      <button id="cam-allow-btn" onclick="requestCameraAndStart()" style="padding:14px;background:linear-gradient(135deg,var(--navy),var(--orange));border:none;border-radius:12px;color:#fff;font-family:'Sora',sans-serif;font-weight:800;font-size:15px;cursor:pointer">Allow & Start Test</button>
+      <button onclick="startWithoutCamera()" style="padding:12px;background:var(--surf2);border:1px solid var(--border);border-radius:12px;color:var(--muted);font-size:13px;cursor:pointer">Continue Without Camera</button>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

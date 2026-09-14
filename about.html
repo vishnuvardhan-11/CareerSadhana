@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About – CareerSadhana</title>
+  <link rel="icon" href="static/images/favicon.ico" type="image/x-icon">
+  <link rel="stylesheet" href="static/css/main.css">
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<nav id="main-nav">
+  <a class="logo" href="index.html">
+    <img src="static/images/logo.png" alt="CareerSadhana Logo" id="logo-img">
+    <span class="logo-text"><span class="career">Career</span><span class="sadhana">Sadhana</span></span>
+  </a>
+  <button class="hamburger" id="hamburger" onclick="toggleMobileMenu()">&#9776;</button>
+  <div class="nav-links" id="nav-links">
+    <a class="nav-btn " href="index.html">Home</a>
+    <a class="nav-btn " href="ats.html">ATS Checker</a>
+    <a class="nav-btn " href="jobs.html">Jobs</a>
+    <a class="nav-btn " href="versant.html">Versant Test</a>
+    <a class="nav-btn " href="ai-interview.html">AI Interview</a>
+    <a class="nav-btn " href="blogs.html">Blogs</a>
+    <a class="nav-btn active" href="about.html">About</a>
+  </div>
+</nav>
+
+<div class="page-hero">
+  <div class="container">
+    <h1>About CareerSadhana</h1>
+    <p>Empowering job seekers with smart tools and curated opportunities</p>
+  </div>
+</div>
+
+<div class="container" style="max-width:820px;padding:2rem 1rem">
+
+  <div class="about-mission-card">
+    <h2>Our Mission</h2>
+    <p>CareerSadhana is dedicated to bridging the gap between talented professionals and their dream careers. We leverage cutting-edge technology to make the job search process smarter, faster, and more effective for every candidate — from fresh graduates to seasoned professionals.</p>
+  </div>
+
+  <div class="about-grid">
+    <div class="card">
+      <div style="font-size:2rem;margin-bottom:.75rem">📄</div>
+      <h3>ATS Optimization</h3>
+      <p style="color:var(--muted)">Our AI analyzes your resume against job descriptions and gives real keyword-based match scores with specific improvement suggestions.</p>
+    </div>
+    <div class="card">
+      <div style="font-size:2rem;margin-bottom:.75rem">💼</div>
+      <h3>Daily Job Updates</h3>
+      <p style="color:var(--muted)">We curate and update Government and Private sector job listings daily so you never miss an opportunity.</p>
+    </div>
+    <div class="card">
+      <div style="font-size:2rem;margin-bottom:.75rem">🎙️</div>
+      <h3>Versant Prep</h3>
+      <p style="color:var(--muted)">Realistic Versant test simulation with all 6 parts, camera monitoring, and real-time feedback to prepare you for the actual exam.</p>
+    </div>
+    <div class="card">
+      <div style="font-size:2rem;margin-bottom:.75rem">🛡️</div>
+      <h3>Privacy First</h3>
+      <p style="color:var(--muted)">Your data is never sold. Resume files are deleted immediately after analysis. We comply with all data protection standards.</p>
+    </div>
+  </div>
+
+  <!-- SOCIAL -->
+  <div class="card" style="margin-top:1.5rem">
+    <h3 style="font-family:'Sora',sans-serif;font-size:1.1rem;margin-bottom:1rem;color:var(--navy)">Connect With Us</h3>
+    <div class="social-links-grid">
+      <a class="social-btn" href="https://linkedin.com" target="_blank" rel="noopener">💼 LinkedIn</a>
+      <a class="social-btn" href="https://twitter.com" target="_blank" rel="noopener">🐦 Twitter / X</a>
+      <a class="social-btn" href="https://youtube.com" target="_blank" rel="noopener">▶️ YouTube</a>
+      <a class="social-btn" href="https://t.me" target="_blank" rel="noopener">✈️ Telegram</a>
+      <a class="social-btn" href="https://instagram.com" target="_blank" rel="noopener">📸 Instagram</a>
+      <a class="social-btn" href="https://facebook.com" target="_blank" rel="noopener">👍 Facebook</a>
+    </div>
+  </div>
+
+  <!-- CONTACT FORM -->
+  <div class="card" id="contact" style="margin-top:1.5rem">
+    <h3 style="font-family:'Sora',sans-serif;font-size:1.1rem;margin-bottom:1.25rem;color:var(--navy)">📬 Send Us a Message</h3>
+    <div class="form-row-2">
+      <div class="form-group">
+        <label class="form-label">Your Name</label>
+        <input class="form-input-contact" type="text" id="c-name" placeholder="Full Name">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Email Address</label>
+        <input class="form-input-contact" type="email" id="c-email" placeholder="you@example.com">
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Subject</label>
+      <input class="form-input-contact" type="text" id="c-subject" placeholder="How can we help?">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Message</label>
+      <textarea class="form-textarea" id="c-msg" rows="5" placeholder="Write your message here..."></textarea>
+    </div>
+    <button class="btn-primary" id="contact-btn" onclick="sendContact()">Send Message</button>
+    <div id="contact-success" class="success-banner" style="display:none">✅ Your message has been sent! We'll respond within 24 hours.</div>
+  </div>
+
+</div>
+
+<footer>
+  <div class="container footer-inner">
+    <div class="footer-brand">
+      <span class="logo-text"><span class="career">Career</span><span class="sadhana">Sadhana</span></span>
+      <p>Empowering careers with smart tools and opportunities.</p>
+    </div>
+    <div class="footer-links">
+      <div><strong>Platform</strong>
+        <a href="ats.html">ATS Checker</a>
+        <a href="jobs.html">Jobs</a>
+        <a href="versant.html">Versant Test</a>
+      </div>
+      <div><strong>Company</strong>
+        <a href="about.html">About Us</a>
+        <a href="about.html#contact">Contact</a>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom"><p>© 2025 CareerSadhana. All rights reserved.</p></div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<script src="static/js/main.js"></script>
+<script>
+// EmailJS config — replace with your actual keys from emailjs.com
+(function(){ emailjs.init({ publicKey: 'YOUR_EMAILJS_PUBLIC_KEY' }); })();
+
+function sendContact(){
+  const n = document.getElementById('c-name').value.trim();
+  const e = document.getElementById('c-email').value.trim();
+  const s = document.getElementById('c-subject').value.trim();
+  const m = document.getElementById('c-msg').value.trim();
+  if(!n||!e||!s||!m){ alert('Please fill in all fields.'); return; }
+
+  const btn = document.getElementById('contact-btn');
+  btn.textContent = 'Sending…';
+  btn.disabled = true;
+
+  // Send via EmailJS to oeshitechnologies@gmail.com
+  emailjs.send('YOUR_SERVICE_ID', 'YOUR_TEMPLATE_ID', {
+    from_name: n,
+    from_email: e,
+    subject: s,
+    message: m,
+    to_email: 'oeshitechnologies@gmail.com'
+  }).then(() => {
+    const s2 = document.getElementById('contact-success');
+    s2.style.display = 'block';
+    document.getElementById('c-name').value = '';
+    document.getElementById('c-email').value = '';
+    document.getElementById('c-subject').value = '';
+    document.getElementById('c-msg').value = '';
+    btn.textContent = 'Send Message';
+    btn.disabled = false;
+    setTimeout(() => s2.style.display = 'none', 5000);
+  }).catch(err => {
+    alert('Failed to send message. Please try again or email us directly at oeshitechnologies@gmail.com');
+    btn.textContent = 'Send Message';
+    btn.disabled = false;
+    console.error('EmailJS error:', err);
+  });
+}
+</script>
+</body>
+</html>
