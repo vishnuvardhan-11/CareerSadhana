@@ -1,0 +1,51 @@
+// jobs-data.js – Edit this file to add/update jobs
+// Format: { title, company, location, type, deadline, url, tags }
+// type: "gov" or "pvt"
+
+const JOBS_DATA = {
+  gov: [
+    { id:"g1", title:"Staff Selection Commission – Combined Graduate Level", company:"SSC", location:"All India", deadline:"2026-08-26", url:"https://ssc.nic.in", tags:["CGL","Graduate","Government"] },
+    { id:"g2", title:"IBPS PO – Probationary Officer", company:"IBPS", location:"Pan India", deadline:"2026-08-04", url:"https://www.ibps.in", tags:["Banking","PO","Graduate"] },
+    { id:"g3", title:"Railway Recruitment Board – Group D", company:"RRB", location:"Pan India", deadline:"2026-10-07", url:"https://www.rrbcdg.gov.in", tags:["Railway","10th Pass","Group D"] },
+    { id:"g4", title:"UPSC Civil Services Examination", company:"UPSC", location:"All India", deadline:"2026-09-29", url:"https://upsc.gov.in", tags:["IAS","IPS","UPSC","Graduate"] },
+    { id:"g5", title:"National Defence Academy – NDA Exam", company:"UPSC / NDA", location:"All India", deadline:"2026-09-24", url:"https://upsc.gov.in", tags:["Defence","NDA","12th Pass"] },
+    { id:"g6", title:"India Post – Gramin Dak Sevak (GDS)", company:"India Post", location:"Pan India", deadline:"2026-09-02", url:"https://indiapostgdsonline.gov.in", tags:["Post Office","10th Pass","GDS"] },
+    { id:"g7", title:"ESIC – Staff Nurse & Multi Tasking Staff", company:"ESIC", location:"Multiple States", deadline:"2026-08-24", url:"https://esic.nic.in", tags:["Healthcare","Nurse","MTS"] },
+    { id:"g8", title:"SBI Clerk – Junior Associates", company:"SBI", location:"Pan India", deadline:"2026-12-15", url:"https://sbi.co.in/careers", tags:["Banking","Clerk","Graduate"] },
+    { id:"g9", title:"DRDO Scientist – Junior Research Fellow", company:"DRDO", location:"Delhi/Mumbai", deadline:"2026-08-20", url:"https://drdo.gov.in", tags:["Research","Science","Engineering"] },
+    { id:"g10", title:"Teaching Recruitment – Central Teacher Eligibility Test", company:"CBSE / CTET", location:"All India", deadline:"2026-11-14", url:"https://ctet.nic.in", tags:["CTET","Teaching","B.Ed"] },
+    { id:"g11", title:"NABARD Development Assistant", company:"NABARD", location:"Multiple States", deadline:"2026-08-06", url:"https://www.nabard.org", tags:["Banking","Rural","Graduate"] },
+    { id:"g12", title:"AIIMS – Nursing & Technical Staff", company:"AIIMS Delhi", location:"New Delhi", deadline:"2026-08-05", url:"https://www.aiims.edu", tags:["Healthcare","AIIMS","Nursing"] },
+    { id:"g13", title:"High Court – Law Clerk cum Research Assistant", company:"Delhi High Court", location:"New Delhi", deadline:"2026-08-21", url:"https://delhihighcourt.nic.in", tags:["Law","Court","LLB"] },
+    { id:"g14", title:"FCI – Manager & Assistant Grade", company:"FCI", location:"Pan India", deadline:"2026-09-22", url:"https://fci.gov.in", tags:["FCI","Logistics","Graduate"] },
+    { id:"g15", title:"LIC AAO – Assistant Administrative Officer", company:"LIC India", location:"Pan India", deadline:"2026-09-26", url:"https://licindia.in", tags:["Insurance","LIC","AAO","Graduate"] },
+    { id:"g16", title:"BSNL – Junior Telecom Officer", company:"BSNL", location:"Multiple Circles", deadline:"2026-12-05", url:"https://bsnl.co.in", tags:["Telecom","Engineering","JTO"] },
+    { id:"g17", title:"Municipal Corporation – Junior Engineer Civil", company:"MCD Delhi", location:"New Delhi", deadline:"2026-08-04", url:"https://mcdonline.nic.in", tags:["Civil Engg","Municipal","JE"] },
+    { id:"g18", title:"Indian Navy – Sailor & MR Entry", company:"Indian Navy", location:"All India", deadline:"2026-09-17", url:"https://joinindiannavy.gov.in", tags:["Navy","Defence","10+2"] },
+    { id:"g19", title:"ONGC Graduate Trainee – Engineering", company:"ONGC", location:"Multiple Locations", deadline:"2026-12-15", url:"https://ongcindia.com", tags:["Oil","Gas","Engineering","Graduate"] },
+    { id:"g20", title:"SEBI Grade A Officer", company:"SEBI", location:"Mumbai", deadline:"2026-11-13", url:"https://www.sebi.gov.in", tags:["Finance","SEBI","Regulatory","Graduate"] },
+  ],
+  pvt: [
+    { id:"p1", title:"Business Development Executive", company:"TCS", location:"Mumbai / Bangalore", deadline:"2026-09-23", url:"https://www.tcs.com/careers", tags:["IT","Sales","Graduate","Fresher"] },
+    { id:"p2", title:"Software Engineer – Full Stack", company:"Infosys", location:"Pune / Hyderabad", deadline:"2026-11-20", url:"https://career.infosys.com", tags:["Software","Full Stack","Java","React"] },
+    { id:"p3", title:"Customer Experience Associate", company:"Amazon India", location:"Bangalore / Chennai", deadline:"2026-10-08", url:"https://www.amazon.jobs/en/locations/india", tags:["Customer Service","E-commerce","Graduate"] },
+    { id:"p4", title:"Data Analyst – Business Intelligence", company:"Flipkart", location:"Bangalore", deadline:"2026-07-30", url:"https://www.flipkartcareers.com", tags:["Data","Analytics","SQL","Python"] },
+    { id:"p5", title:"HR Business Partner", company:"Wipro", location:"Mumbai", deadline:"2026-09-07", url:"https://careers.wipro.com", tags:["HR","Human Resources","Graduate","MBA"] },
+    { id:"p6", title:"Digital Marketing Specialist", company:"HCL Technologies", location:"Noida", deadline:"2026-11-14", url:"https://hcltech.com/careers", tags:["Marketing","SEO","Social Media","Digital"] },
+    { id:"p7", title:"Financial Analyst – FP&A", company:"HDFC Bank", location:"Mumbai", deadline:"2026-10-24", url:"https://hdfcbank.com/careers", tags:["Finance","Banking","MBA","CFA"] },
+    { id:"p8", title:"Content Writer & SEO Specialist", company:"Byju's", location:"Bangalore / Remote", deadline:"2026-10-08", url:"https://byjus.com/careers", tags:["Content","Writing","EdTech","SEO"] },
+    { id:"p9", title:"Graphic Designer – Brand & Creative", company:"Zomato", location:"Gurgaon", deadline:"2026-09-06", url:"https://www.zomato.com/jobs", tags:["Design","Graphic","Creative","UI"] },
+    { id:"p10", title:"Network Engineer – Infrastructure", company:"Reliance Jio", location:"Mumbai", deadline:"2026-09-22", url:"https://www.jio.com/careers", tags:["Networking","Telecom","Engineering","CCNA"] },
+    { id:"p11", title:"Supply Chain Manager", company:"Mahindra & Mahindra", location:"Pune", deadline:"2026-10-23", url:"https://careers.mahindra.com", tags:["Supply Chain","Operations","Manufacturing","MBA"] },
+    { id:"p12", title:"Python Developer – ML Engineering", company:"Zoho", location:"Chennai / Remote", deadline:"2026-08-24", url:"https://careers.zoho.com", tags:["Python","ML","AI","Developer"] },
+    { id:"p13", title:"Operations Executive – Last Mile Delivery", company:"Meesho", location:"Multiple Cities", deadline:"2026-08-21", url:"https://meesho.io/careers", tags:["Operations","Logistics","E-commerce","Graduate"] },
+    { id:"p14", title:"Cybersecurity Analyst", company:"IBM India", location:"Bangalore / Hyderabad", deadline:"2026-11-03", url:"https://www.ibm.com/employment/india", tags:["Cybersecurity","IT","CISSP","SOC"] },
+    { id:"p15", title:"Product Manager – Consumer Apps", company:"Paytm", location:"Noida", deadline:"2026-08-22", url:"https://paytm.com/careers", tags:["Product","Management","MBA","Fintech"] },
+    { id:"p16", title:"Cloud Solutions Architect", company:"Microsoft India", location:"Hyderabad", deadline:"2026-10-28", url:"https://careers.microsoft.com", tags:["Cloud","Azure","Architecture","Engineering"] },
+    { id:"p17", title:"Legal Counsel – Corporate & Compliance", company:"Tata Group", location:"Mumbai", deadline:"2026-10-25", url:"https://www.tata.com/careers", tags:["Legal","LLB","Compliance","Corporate"] },
+    { id:"p18", title:"UX Designer – Mobile & Web", company:"Swiggy", location:"Bangalore", deadline:"2026-10-04", url:"https://careers.swiggy.com", tags:["UX","Design","Figma","Mobile"] },
+    { id:"p19", title:"Sales Manager – Enterprise Accounts", company:"Salesforce India", location:"Mumbai / Bangalore", deadline:"2026-08-09", url:"https://salesforce.com/company/careers", tags:["Sales","Enterprise","CRM","MBA"] },
+    { id:"p20", title:"Biomedical Engineer – R&D", company:"Dr. Reddy's Laboratories", location:"Hyderabad", deadline:"2026-11-23", url:"https://careers.drreddys.com", tags:["Biomedical","Pharma","R&D","Engineering"] },
+    { id:"p21", title:"ASE", company:"EY", location:"Bangalore", deadline:"2026-12-13", url:"https://www.ey.com/en_in/careers", tags:["Python","C++","Java","Andriod"] },
+  ]
+};
